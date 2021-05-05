@@ -1,0 +1,22 @@
+{
+  "anomalies": {
+    "1": {
+      "logPath": "./test/logs/security-alerts.json",
+      "maxLogEntries": 1000,
+      "sendEmail": { "to": "", "from": "" },
+      "exitPage": "./views/exitpage-sample.php"
+    },
+    "2": {
+      "logPath": "./test/logs/breaking-bugs.json",
+      "maxLogEntries": 500,
+      "sendEmail": { "to": "", "from": "" },
+      "exitPage": "./views/exitpage-sample.php"
+    },
+    "3": {
+      "logPath": "./test/logs/fails.json",
+      "maxLogEntries": 500,
+      "sendEmail": { "to": "", "from": "" },
+      "exitPage": "./views/exitpage-sample.php"
+    }
+  }
+}
