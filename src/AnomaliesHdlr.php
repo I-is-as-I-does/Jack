@@ -5,85 +5,65 @@ namespace ExoProject\Jacks;
 // @doc: in a dev env., you can also use:
 // error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
+//@doc: this class can throw custom exceptions; if need be, wrap your calls with try{} catch(\Exception $e) {}
+
 class AnomaliesHdlr implements AnomaliesHdlr_i
 {
-    public $exceptionsMap = [
+    protected $exceptionsMap = [
         "err-a-001"=>"configuration file not found",
         "err-a-002"=>"unvalid configuration file",
-        "err-a-002"=>"anomaly level not found",
+        "err-a-003"=>"anomaly level not found",
     ];
-    public $lastFallback = 'This page is in maintenance mode.';
-    public $dfltconfigFile = 'config\\anomalies.json';
-    public $dfltloglength = 500;
+    protected $dfltconfigFile = 'config\\anomalies.json';
+
+
+    protected $exitFallback = 'This page is in maintenance mode.';
+    protected $dfltlogconsrvtn = 366;
+    protected $minlogconsrvtn = 7;
+
+
     protected $configFilePath;
     protected $config;
 
-    public function __construct($autoSetConfig = true)
+    public function __construct($autoFetchConfig = true)
     {
-        if ($autoSetConfig === true) {
-            $this->setConfig();
+        if ($autoFetchConfig === true) {
+            $this->setConfigFromFile();
         }
     }
 
-    public function setConfigPath($configFilePath = null)
+    protected function getDfltConfigPath()
+    {
+        return dirname(__DIR__).$this->dfltconfigFile;
+    }
+
+    public function setConfigFromFile($configFilePath = null)
     {
         if ($configFilePath === null) {
-            $configFilePath = dirname(__DIR__).$this->dfltconfigFile;
+            $configFilePath = $this->getDfltConfigPath();
         }
         if (!file_exists($configFilePath)) {
-            return false;
+            throw new \Exception('err-a-001');
+            return;
         }
-        $this->configFilePath = $configFilePath;
-        return true;
-    }
-
-    public function getConfigPath()
-    {
-        if (!empty($this->configFilePath)) {
-            return $this->configFilePath;
-        }
-        return false;
-    }
-
-    public function setConfig($configContent = null)
-    {
-        if ($configContent === null) {
-            if (!isset($this->configFilePath)) {
-                $setpath = $this->setConfigPath();
-                if (!$setpath) {
-                    throw new \Exception('err-a-001');
-                    exit;
-                }
-            }
-            $configContent = file_get_contents($this->configFilePath);
-        }
-        if (!is_array($configContent)) {
-            $configContent = json_decode($configContent, true);
-        }
+ 
+        $configContent = json_decode(file_get_contents($configFilePath), true);
         if (empty($configContent) || empty($configContent["anomalies"])) {
             throw new \Exception('err-a-002');
-            exit;
+            return;
         }
         $this->config = $configContent["anomalies"];
-    }
- 
-    public function getConfig()
-    {
-        if (!empty($this->config)) {
-            return $this->config;
-        }
-        return false;
     }
 
     public function handle($datatolog, $origin = null, $lvl = 2)
     {
         if (!isset($this->config)) {
-            $this->setConfig();
+            $this->setConfigFromFile();
         }
         if (empty($this->config[$lvl])) {
             if ($lvl != 2 && empty($this->config[2])) {
                 throw new \Exception('err-a-003');
-                exit;
+                return;
             }
             $lvl = 2;
         }
@@ -93,67 +73,96 @@ class AnomaliesHdlr implements AnomaliesHdlr_i
             $origin = debug_backtrace()[0]['file'];
         }
 
-        $content = ['origin' => $origin, 'data' => $datatolog];
-
-
-        if (!empty($lvldata["logPath"])) {
-            if (empty($lvldata["maxLogEntries"])) {
-                $lvldata["maxLogEntries"] = $this->$dfltloglength;
-            }
-            $writelog = $this->updateLog($lvldata["logPath"], $content, $lvldata["maxLogEntries"]);
-            if ($writelog === false) {
-                $content['addt'] = ['AnomaliesHdlr: an error occured while trying to update log'];
-            }
-        } else {
-            $content['addt'] = ['AnomaliesHdlr: log path is not set'];
-        }
-
-        if (!empty($lvldata["sendEmail"]) && !empty($lvldata["sendEmail"]["to"]) && !empty($lvldata["sendEmail"]["from"])) {
-            $sendemail = Utils::sendEmail('Anomaly report', json_encode($content,JSON_PRETTY_PRINT), $lvldata["sendEmail"]["from"],$lvldata["sendEmail"]["to"], );
-        }
-
-        if (!empty($lvldata["exitPage"]) && !file_exists($lvldata["exitPage"])) {
-            if (!isset($content['addt'])) {
-                $content['addt'] = [];
-            }
-            $content['addt'][] = 'AnomaliesHdlr: unvalid path to exit page';
-        }
-    
+        $content = ['origin' => $origin, 'data' => [$datatolog]];
+        
+        $exitContent = false;
         if (!empty($lvldata["exitPage"])) {
-            $output = $this->outputExitPage($lvldata["exitPage"]);
-            if (!$output) {
+            $exitContent = $this->getExitContent($lvldata["exitPage"]);
+            if ($exitContent == $this->exitFallback) {
+                $content['data'][] = 'AnomaliesHdlr: unvalid path to exit page';
             }
+        }
+
+        if (empty($lvldata["logPath"])) {
+            $content['data'][] = 'AnomaliesHdlr: log path is not set';
+        } else {
+            if (empty($lvldata["daysBeforeExpiration"])) {
+                $lvldata["daysBeforeExpiration"] = $this->$dfltlogconsrvtn;
+            }
+            $writelog = $this->updateLog($lvldata["logPath"], $content, $lvldata["daysBeforeExpiration"]);
+            if ($writelog === false) {
+                $content['data'][] = 'AnomaliesHdlr: an error occured while trying to update log';
+                $lvldata["logPath"] = false;
+            }
+        }
+        
+        $addt = [];
+        if (!empty($lvldata["sendEmail"]["isActive"])) {
+            if (empty($lvldata["sendEmail"]["to"]) || empty($lvldata["sendEmail"]["from"])) {
+                $missingpart = 'sender';
+                if (empty($lvldata["sendEmail"]["to"])) {
+                    $missingpart = 'recipient';
+                }
+                $addt[] = 'AnomaliesHdlr: missing email '.$missingpart.' information';
+                $lvldata["sendEmail"]["isActive"] = false;
+            } else {
+                $sendemail = Utils::sendEmail('Anomaly report', json_encode($content, JSON_PRETTY_PRINT), $lvldata["sendEmail"]["from"], $lvldata["sendEmail"]["to"]);
+                if ($sendemail === false) {
+                    $addt[] = 'AnomaliesHdlr: fail to send email report';
+                    $lvldata["sendEmail"]["isActive"] = false;
+                }
+            }
+        }
+
+        if (!empty($addt) && !empty($lvldata["logPath"])) {
+            $this->updateLog($lvldata["logPath"], $addt, $lvldata["daysBeforeExpiration"]);
+        }
+
+        if (!empty($exitContent)) {
+            $this->outputExitContent($exitContent);
         }
     }
 
-    public static function updateLog($logpath, $content, $loglength = null)
+    protected function getExitContent($exitPagePath)
     {
-        if (empty($loglength) || !Utils::isPostvInt($loglength)) {
-            $loglength = $this->$dfltloglength;
+        if (!file_exists($exitPagePath)) {
+            return $this->exitFallback;
+        } else {
+            ob_start();
+            include($exitPagePath);
+            return ob_get_clean();
         }
+    }
+
+    protected function outputExitContent($exitContent)
+    {
+        exit($exitContent);
+    }
+
+
+    protected function updateLog($logpath, $content, $logconsrvtn)
+    {
         if (!is_writable(dirname($logpath))) {
             return false;
         }
-
+        $logconsrvtn = abs(intval($logconsrvtn));
+        if ($logconsrvtn < $this->minlogconsrvtn) {
+            $logconsrvtn = $this->minlogconsrvtn;
+        }
         $timestamp = TimeHdlr::timestamp();
         $log = json_decode(file_get_contents($logpath), true);
         if (empty($log)) {
             $log = [];
-        } elseif (count($log) > $loglength) {
+        } else {
+            //@todo: test
+            $timestamps = array_keys($log);
+            $c = 0;
+            while (TimeHdlr::isOld($timestamps[$c], $timestamp, $logconsrvtn, '%a')) {
+                unset($log[$timestamps[$c]]);
+                $c++;
+            }
         }
         $log[$timestamp] = $content;
         return file_put_contents($logpath, json_encode($log, JSON_PRETTY_PRINT), LOCK_EX);
-    }
-
-    public static function outputExitPage($exitPagePath, $fallback = null)
-    {
-        if (file_exists($exitPagePath)) {
-            require($exitPagePath);
-            exit;
-        }
-        if (!empty($fallback)) {
-            exit($fallback);
-        }
-        exit($this->lastFallback);
     }
 }

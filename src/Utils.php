@@ -4,10 +4,12 @@ namespace ExoProject\Jacks;
 
 class Utils implements Utils_i
 {
-    public static function sendEmail($subject, $content, $sender, $recipient, $sitename)
+    public static function sendEmail($subject, $content, $sender, $recipient)
     {
         /* @doc: using a custom function can avoid some injections, else website/app can turn into a spam distributor.
            Plus it's convenient to mutualise headers and encoding. */
+
+        $sitename = $_SERVER['HTTP_HOST'];
         $headers = [
           'From' => $sender,
           'Reply-To' => $recipient,

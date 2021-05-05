@@ -1,22 +1,27 @@
 {
+  "settings":{
+    "exitPage":"./views/exitpage-sample.php",
+    "exitFallback":"This page is in maintenance mode.",
+    "dfltlogconsrvtn": 366,
+    "minlogconsrvtn": 7,
+    "recipientEmailAddress":"",
+    "senderEmailAddress":""
+  },
   "anomalies": {
     "1": {
       "logPath": "./test/logs/security-alerts.json",
-      "maxLogEntries": 1000,
-      "sendEmail": { "to": "", "from": "" },
-      "exitPage": "./views/exitpage-sample.php"
+      "daysBeforeExpiration": 366,
+      "sendEmail": false
     },
     "2": {
       "logPath": "./test/logs/breaking-bugs.json",
-      "maxLogEntries": 500,
-      "sendEmail": { "to": "", "from": "" },
-      "exitPage": "./views/exitpage-sample.php"
+      "daysBeforeExpiration": 183,
+      "sendEmail": false
     },
     "3": {
       "logPath": "./test/logs/fails.json",
-      "maxLogEntries": 500,
-      "sendEmail": { "to": "", "from": "" },
-      "exitPage": "./views/exitpage-sample.php"
+      "daysBeforeExpiration": 183,
+      "sendEmail": false
     }
   }
 }
