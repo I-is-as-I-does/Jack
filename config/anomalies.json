@@ -11,7 +11,7 @@
     "1": {
       "logPath": "./test/logs/security-alerts.json",
       "daysBeforeExpiration": 366,
-      "sendEmail": false
+      "sendEmail": true
     },
     "2": {
       "logPath": "./test/logs/breaking-bugs.json",
