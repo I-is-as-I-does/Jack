@@ -2,9 +2,9 @@
 /* This file is part of Jacks | ExoProject | (c) 2021 I-is-as-I-does | MIT License */
 namespace ExoProject\Jacks;
 
-class TimeHdlr implements TimeHdlr_i
+class Time implements Time_i
 {
-    public static function timestamp($format = "Y-m-d H:i:s \G\M\TO")
+    public static function stamp($format = "Y-m-d H:i:s \G\M\TO")
     {
         return date($format);
     }
@@ -26,19 +26,16 @@ class TimeHdlr implements TimeHdlr_i
         return true;
     }
 
-    public static function isOld($origin, $target, $limit = 30, $format = '%a')
+    public static function getInterval($origin, $target = null, $format = '%a')
     { //@doc: default format is: days
-        if (!$target) {
-            $target = self::timestamp();
+        if (empty($target)) {
+            $target = self::stamp();
         }
         $target = date_create($target);
         $origin = date_create($origin);
         $interval = $origin->diff($target);
         $interval = $interval->format($format);
-        if ((int)$interval > $limit) {
-            return true;
-        }
-        return false;
+        return (int)$interval;
     }
 
     public static function isValidTimezone($timezoneId)
@@ -51,4 +48,3 @@ class TimeHdlr implements TimeHdlr_i
         return true;
     }
 }
-

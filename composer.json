@@ -1,6 +1,6 @@
 {
     "name": "exoproject/jacks",
-    "description": "A humble set of classes-of-all-trades, also known as utils. Includes an error handler.",
+    "description": "A minimal set of php classes-of-all-trades, also known as utils.",
     "type": "library",
     "keywords" :["php", "utils"],
     "homepage":"https://github.com/I-is-as-I-does/Jacks",

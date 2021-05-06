@@ -2,29 +2,42 @@
 /* This file is part of Jacks | ExoProject | (c) 2021 I-is-as-I-does | MIT License */
 namespace ExoProject\Jacks;
 
-class FileHdlr implements FileHdlr_i
+class File implements File_i
 {
-    private static function traceBack()
-    {
-        return debug_backtrace()[0]['file'];
+    /* @doc: You can use ExoProject "Houston" error handler:
+            $ composer require exoproject/houston
+            $errorHdlr_class = 'ExoProject\Houston\Houston';
+        or edit to use your own; 
+        or set to false to deactivate error handling.
+    */   
+    protected $errorHdlr_class = false; 
+
+    protected function callErrHandlr($errMsg){
+        if (!empty(self::$errorHdlr_class)) {
+            $errhdlr = self::$errorHdlr_class;
+            $report = ['data'=>$errMsg, 'origin'=>debug_backtrace()[0]['file']];
+            //@doc: add a timestamp to report if your error handler does not add it on its own
+            new $errhdlr($report);
+        }
     }
 
-    public static function writeFile($target, $content, $lvl = 2)
+    public static function write($target, $content)
     {
-        $check = self::checkFilePath(dirname($path), $lvl);
+        $check = self::checkPath(dirname($path));
         if ($check === false) {
             return false;
         }
         $write = file_put_contents($target, $content, LOCK_EX);
         if ($write === false) {
-            AnomaliesHdlr::record($target.' write error', self::traceBack(), $lvl);
+           self::callErrHandlr($target.' write error');
+           return false;
         }
         return $write;
     }
 
-    public static function buffrInclude($path, $lvl = 2)
-    { //@doc !if vars inside content, be aware that they would not be defined >here<
-        $check = self::checkFilePath($path, $lvl);
+    public static function buffrInclude($path)
+    { //@doc !if vars inside content, be aware that they will not be defined >here<
+        $check = self::checkPath($path);
         if ($check === false) {
             return false;
         }
@@ -33,45 +46,45 @@ class FileHdlr implements FileHdlr_i
         return ob_get_clean();
     }
 
-    public static function requireContents($path, $lvl = 2)
+    public static function requireContents($path)
     {
-        $check = self::checkFilePath($path, $lvl);
+        $check = self::checkPath($path);
         if ($check === false) {
             return false;
         }
         $content = file_get_contents($path);
         if ($content === false) {
-            AnomaliesHdlr::record($path.' file not readable', self::traceBack(), $lvl);
+            self::callErrHandlr($path.' file not readable');
         }
         return $content;
     }
 
-    public static function checkFilePath($path, $lvl = 3)
+    public static function checkPath($path)
     {
         if (!file_exists($path)) {
-            AnomaliesHdlr::record($path.' not found', self::traceBack(), $lvl);
+            self::callErrHandlr($path.' not found');
             return false;
         }
         return true;
     }
 
-    public static function getinikey($varnam, $path, $lvl = 2)
+    public static function getinival($path, $key)
     {
-        $check = self::checkFilePath($path, $lvl);
+        $check = self::checkPath($path);
         if ($check === false) {
             return false;
         }
-        $keys = parse_ini_file($path);
-        if (array_key_exists($varnam, $keys)) {
-            return $keys[$varnam];
+        $content = parse_ini_file($path);
+        if (array_key_exists($key, $content)) {
+            return $content[$key];
         }
         return false;
     }
 
-    public static function handleb64img($dataimg, $dest = false, $lvl = 3)
+    public static function handleb64img($dataimg, $dest = false)
     {
         if (stripos($dataimg, 'data:image/png;base64,') === false) {
-            AnomaliesHdlr::record('invalid base64 img', self::traceBack(), $lvl);
+            self::callErrHandlr('invalid base64 img');
             return false;
         }
       
@@ -84,31 +97,31 @@ class FileHdlr implements FileHdlr_i
             return imagecreatefromstring($decdimg);
         }
 
-        return self::writeFile($dest, $decdimg, $lvl);
+        return self::write($dest, $decdimg);
     }
 
-    public static function fileExt($file)
+    public static function ext($file)
     {
         return strtolower(pathinfo($file, PATHINFO_EXTENSION));
     }
 
-    public static function readJson($path, $lvl = 2)
+    public static function readJson($path)
     {
-        $content = self::requireContents($path, $lvl);
+        $content = self::requireContents($path);
         if ($content !== false) {
             $content = json_decode($content, true);
             if ($content !== null) {
                 return $content;
             }
-            AnomaliesHdlr::record($path.' seems to be unvalid json', self::traceBack(), $lvl);
+            self::callErrHandlr($path.' seems to be unvalid json');
         }
         return [];
     }
 
-    public static function saveJson($data, $path, $lvl = 2)
+    public static function saveJson($data, $path)
     {
         $json = json_encode($data, JSON_PRETTY_PRINT);
-        return self::writeFile($path, $json, $lvl);
+        return self::write($path, $json);
     }
 
     public static function testReadWrite($filesOrfolders)

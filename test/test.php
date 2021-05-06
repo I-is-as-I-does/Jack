@@ -1,8 +1,6 @@
 <?php
-use ExoProject\Jacks\TimeHdlr;
+use ExoProject\Jacks\Time;
 
-require_once('./../vendor/autoload.php');
+require_once(dirname(__DIR__).'\\vendor\\autoload.php');
 
-//var_dump(TimeHdlr::isValidTimezone('Europe/Paris'));
-
-echo $_SERVER['HTTP_HOST'];
+var_dump(Time::isValidTimezone('Europe/Paris'));

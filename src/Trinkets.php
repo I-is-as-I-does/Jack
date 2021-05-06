@@ -2,7 +2,7 @@
 /* This file is part of Jacks | ExoProject | (c) 2021 I-is-as-I-does | MIT License */
 namespace ExoProject\Jacks;
 
-class Utils implements Utils_i
+class Trinkets implements Trinkets_i
 {
     public static function sendEmail($subject, $content, $sender, $recipient)
     {
