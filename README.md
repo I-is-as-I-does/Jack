@@ -2,10 +2,10 @@
 
 A minimal set of static php classes-of-all-trades, also known as utils.
 
-An error handler can be plugged-in the `File` class.
+An error handler can be plugged-in the `File` class.  
 You can use [Houston](https://github.com/I-is-as-I-does/Houston)!
 
-Jacks are a work in progress. :wrench:
+Jacks are a work in progress. :wrench:  
 Expect augments in following weeks/months of year 2021.
 
 ## Getting started
@@ -32,7 +32,7 @@ Time::getInterval($origin, $target, $format = '%a');
 Time::isValidTimezone($timezoneId);
 ````
 
-`getInterval` default `$format` is days.
+`getInterval` default `$format` is days.  
 You can take a look at the [php doc](https://www.php.net/manual/en/datetime.createfromformat.php) for format alternatives.
 
 ### Token
@@ -46,7 +46,7 @@ Token::withSecret($secretchar, $pool, $tokenlength);
 Token::b64basic($bytesnbr = 64);
 ````
 
-Please note that these tokens all live in candy land.
+Please note that these tokens all live in candy land.  
 For crypto-secure tokens, you should look into [sodium](https://www.php.net/manual/en/book.sodium.php).
 
 ### Trinkets
@@ -59,7 +59,7 @@ Trinkets::isPostvInt($value);
 Trinkets::boolify($val);
 ````
 
-`sendEmail` is nice if you don't need a fully-fledge email handler. Using a modest custom method can actually avoid some injections, so that your website/app doesn't turn into a spam distributor.
+`sendEmail` is nice if you don't need a fully-fledge email handler. Using a modest custom method can actually avoid some injections, so that your website/app doesn't turn into a spam distributor.  
 Plus it's convenient to mutualise headers and encoding.
 
 `isPostvInt` works even if `$value` is a string-integer.
@@ -82,7 +82,7 @@ File::testReadWrite($filesOrfolders);
 
 Note that `handleb64img` requires [GD](https://www.php.net/manual/en/book.image.php) if you wish to ouput bin image instead of saving it as a png file.
 
-I recommend to use File alongside an error handler.
+I recommend to use File alongside an error handler.  
 There's a property and a dedicated method to plug one in.
 
 ````php
@@ -101,7 +101,7 @@ Or set up your own!
 ## Contributing
 
 Sure! :raised_hands:
-You can take a loot at [CONTRIBUTING](CONTRIBUTING.md).
+You can take a loot at [CONTRIBUTING](CONTRIBUTING.md).  
 This repo also features a [Discussions](https://github.com/I-is-as-I-does/Houston/discussions) tab.
 
 ## License
