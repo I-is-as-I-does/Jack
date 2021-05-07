@@ -18,7 +18,7 @@ Or cherry pick files and methods to suit your needs.
 
 ## Overview
 ````php
-require_once(dirname(__DIR__).'\\composer\\autoload.php');
+require_once(dirname(__DIR__).'\\vendor\\autoload.php');
 ````
 
 ### Time
