@@ -6,9 +6,6 @@ class Trinkets implements Trinkets_i
 {
     public static function sendEmail($subject, $content, $sender, $recipient)
     {
-        /* @doc: using a custom function can avoid some injections, else website/app can turn into a spam distributor.
-           Plus it's convenient to mutualise headers and encoding. */
-
         $sitename = $_SERVER['HTTP_HOST'];
         $headers = [
           'From' => $sender,
@@ -41,7 +38,7 @@ class Trinkets implements Trinkets_i
     }
 
     public static function isPostvInt($value)
-    { //  @doc works even if value is a string-integer
+    { //  @doc works even if $value is a string-integer
         return ((is_int($value) || ctype_digit($value)) && (int)$value > 0);
     }
 

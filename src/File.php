@@ -4,15 +4,10 @@ namespace ExoProject\Jacks;
 
 class File implements File_i
 {
-    /* @doc: You can use ExoProject "Houston" error handler:
-            $ composer require exoproject/houston
-            $errorHdlr_class = 'ExoProject\Houston\Houston';
-        or edit to use your own; 
-        or set to false to deactivate error handling.
-    */   
-    protected $errorHdlr_class = false; 
+    protected $errorHdlr_class = false;
 
-    protected function callErrHandlr($errMsg){
+    protected function callErrHandlr($errMsg)
+    {
         if (!empty(self::$errorHdlr_class)) {
             $errhdlr = self::$errorHdlr_class;
             $report = ['data'=>$errMsg, 'origin'=>debug_backtrace()[0]['file']];
@@ -29,8 +24,8 @@ class File implements File_i
         }
         $write = file_put_contents($target, $content, LOCK_EX);
         if ($write === false) {
-           self::callErrHandlr($target.' write error');
-           return false;
+            self::callErrHandlr($target.' write error');
+            return false;
         }
         return $write;
     }
@@ -96,7 +91,7 @@ class File implements File_i
             // @doc: returns bin img; false if b64 data is not a valid image
             return imagecreatefromstring($decdimg);
         }
-
+        //@doc: $dest should be .png
         return self::write($dest, $decdimg);
     }
 
