@@ -1,9 +1,9 @@
 {
-    "name": "exoproject/jacks",
+    "name": "ssitu/jacktrades",
     "description": "A minimal set of php classes-of-all-trades, also known as utils.",
     "type": "library",
     "keywords" :["php", "utils"],
-    "homepage":"https://github.com/I-is-as-I-does/Jacks",
+    "homepage":"https://github.com/I-is-as-I-does/JackTrades",
     "license": "MIT",
     "readme":"README.md",
     "authors": [
@@ -16,7 +16,7 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "ExoProject\\Jacks\\": "src"
+            "SSITU\\JackTrades\\": "src"
         }
     }
 }
