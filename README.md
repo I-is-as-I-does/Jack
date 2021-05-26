@@ -2,16 +2,13 @@
 
 A minimal set of static php classes-of-all-trades, also known as utils.
 
-An error handler can be plugged-in the `File` class.  
-You can use [Houston](https://github.com/I-is-as-I-does/Houston)!
-
 JackTrades are a work in progress. :wrench:  
 Expect augments in following weeks/months of year 2021.
 
 ## Getting started
 
 ````bash
-$ composer require ssitu/JackTrades
+$ composer require ssitu/jacktrades
 ````
 
 Or cherry pick files and methods to suit your needs.
