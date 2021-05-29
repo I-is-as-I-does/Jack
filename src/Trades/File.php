@@ -4,12 +4,16 @@ namespace SSITU\JackTrades\Trades;
 
 class File implements File_i
 {
-    public function write($data, $path)
+    public function write($data, $path, $formatRslt = false)
     {
+        $write = false;
         if (is_writable(dirname($path))) {
-            return file_put_contents($path, $data, LOCK_EX);
+            $write = file_put_contents($path, $data, LOCK_EX);
         }
-        return false;
+        if(!$formatRslt){
+            return $write;
+        }
+        return [$this->getRsltKeyword($write) => $path];
     }
 
     public function buffrInclude($path)
@@ -73,10 +77,10 @@ class File implements File_i
         return [];
     }
 
-    public function saveJson($data, $path)
+    public function saveJson($data, $path, $formatRslt = false)
     {
         $json = json_encode($data, JSON_PRETTY_PRINT);
-        return $this->write($json, $path);
+        return $this->write($json, $path, $formatRslt);
     }
 
     public function testReadWrite($paths)
@@ -91,4 +95,65 @@ class File implements File_i
         }
         return $rslt;
     }
+
+    public function recursiveCopy($src, $dest, $excl = [])
+    {
+        try {
+            $dir = opendir($src);
+            @mkdir($dest);
+            $log = [];
+            while ($file = readdir($dir)) {
+                if (($file != '.') && ($file != '..') && (empty($excl) || !in_array($file, $excl))) {
+                    if (is_dir($src . '/' . $file)) {
+                        $log[] = $this->recursiveCopy($src . '/' . $file, $dest . '/' . $file);
+                    } else {
+                        $log[] = copy($src . '/' . $file, $dest . '/' . $file);
+                    }
+                }
+            }
+            closedir($dir);
+            return $log;
+        } catch (\Exception $e) {
+            return ['err' => var_export($e,true)];
+        }
+    }
+
+
+    public function recursiveDelete($dirPath)
+    {
+        try {
+            if(!empty($dirPath) && is_dir($dirPath)){
+                $dirObj= new \RecursiveDirectoryIterator($dirPath, \RecursiveDirectoryIterator::SKIP_DOTS); //@doc: upper dirs not included, otherwise DISASTER HAPPENS
+                $files = new \RecursiveIteratorIterator($dirObj, \RecursiveIteratorIterator::CHILD_FIRST);
+                foreach ($files as $path) {
+                    $path->isDir() && !$path->isLink() ? rmdir($path->getPathname()) : unlink($path->getPathname());
+                }
+                return true;
+            }
+            return false;
+        } catch (\Exception $e) {
+            return ['err' => var_export($e,true)];
+        }
+    }
+
+    public function copySrcToDest($src, $dest, $formatRslt = false)
+    {
+        $cop = false;
+        if(file_exists($src) && is_dir(dirname($dest))){
+        $cop = copy($src, $dest);
+        }
+        if(!$formatRslt){
+            return $cop;
+        }
+        return [$this->getRsltKeyword($cop) => $dest];
+    }
+
+    
+    public function getRsltKeyword($boolish){
+        if(!empty($boolish)){
+            return 'success';
+        }
+        return 'err';
+    }
+
 }

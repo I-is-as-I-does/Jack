@@ -5,6 +5,26 @@ namespace SSITU\JackTrades\Trades;
 
 class Admin implements Admin_i
 {
+
+    public function bestHashCost($timeTarget = 0.05, $cost = 8, $algo = PASSWORD_DEFAULT)
+    {
+/** @source: www.php.net/manual
+ * This code will benchmark your server to determine how high of a cost you can
+ * afford. You want to set the highest cost that you can without slowing down
+ * you server too much. 8-10 is a good baseline, and more is good if your servers
+ * are fast enough. By default, the code aims for ≤ 50 milliseconds stretching time,
+ * which is a good baseline for systems handling interactive logins.
+ */
+        do {
+            $cost++;
+            $start = microtime(true);
+            password_hash("test", $algo, ["cost" => $cost]);
+            $end = microtime(true);
+        } while (($end - $start) < $timeTarget);
+  
+        return "Appropriate Cost Found: "  . $cost;
+    }
+
     public function isAlive($url)
     {
         if (filter_var($url, FILTER_VALIDATE_URL)) {
@@ -78,7 +98,7 @@ class Admin implements Admin_i
 
     public function getAvailableSpace($dir, $maxGB) //@doc: $dir must be specified with __DIR__
     {
-        $dirSize = getDirSize($dir);
+        $dirSize = $this->getDirSize($dir);
         $sizeInGb = $dirSize/(1024*1024*1024);
         $perct = ($sizeInGb*100)/$max;
         return round(100-$perct, 2).' %';

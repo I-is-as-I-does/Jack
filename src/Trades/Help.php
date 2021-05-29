@@ -14,6 +14,20 @@ class Help implements Help_i
         return $updatevalues + $basevalues;
     }
 
+    
+    public function flattenOutput($itm, $out = [], $key = ''){
+        if (is_array($itm)) {
+            foreach($itm as $k => $v){ 
+                $out = $this->flattenOutput($v, $out, $key.'.'.$k);
+            }
+        }
+        else {
+            $out[$key]= $itm;
+        }
+    return $out;
+    }
+
+
     public function boolify($value)
     {
         return filter_var($value, FILTER_VALIDATE_BOOLEAN);
@@ -47,13 +61,17 @@ class Help implements Help_i
     }
 
     public function arrayLongestItem($arr)
-    {
+    {if(!empty($arr)){
         return max($this->arrayItemsStrlen($arr));
+    }
+    return 0;
     }
 
     public function arrayLongestKey($arr)
-    {
+    {if(!empty($arr)){
         return max($this->arrayItemsStrlen(array_keys($arr)));
+    }
+      return 0;
     }
 
     public function arrayItemsStrlen($arr)

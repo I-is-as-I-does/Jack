@@ -16,4 +16,6 @@ interface Help_i
     public function arrayLongestItem($arr);
     public function arrayLongestKey($arr);
     public function arrayItemsStrlen($arr);
+
+    public function flattenOutput($itm, $out = [], $key = '');
 }
