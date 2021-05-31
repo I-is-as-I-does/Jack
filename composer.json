@@ -17,7 +17,7 @@
     "autoload": {
         "psr-4": {
             "SSITU\\JackTrades\\": "src",
-            "SSITU\\JackTrades\\Trades": "src/Trades"
+            "SSITU\\JackTrades\\Trades\\": "src/Trades"
         }
     }
 }

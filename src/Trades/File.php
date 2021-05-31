@@ -10,7 +10,7 @@ class File implements File_i
         if (is_writable(dirname($path))) {
             $write = file_put_contents($path, $data, LOCK_EX);
         }
-        if(!$formatRslt){
+        if (!$formatRslt) {
             return $write;
         }
         return [$this->getRsltKeyword($write) => $path];
@@ -20,7 +20,7 @@ class File implements File_i
     { //@doc !if vars inside content, be aware that they will not be defined >here<
         if (file_exists($path)) {
             ob_start();
-            include($path);
+            include $path;
             return ob_get_clean();
         }
         return false;
@@ -47,11 +47,11 @@ class File implements File_i
         if (stripos($dataimg, 'data:image/png;base64,') === false) {
             return false;
         }
-      
+
         $dataimg = str_replace('data:image/png;base64,', '', $dataimg);
         $dataimg = str_replace(' ', '+', $dataimg);
         $decdimg = base64_decode($dataimg);
-      
+
         if ($path === false) {
             // @doc: returns bin img; false if b64 data is not a valid image
             return imagecreatefromstring($decdimg);
@@ -113,17 +113,16 @@ class File implements File_i
             }
             closedir($dir);
             return $log;
-        } catch (\Exception $e) {
-            return ['err' => var_export($e,true)];
+        } catch (\Exception$e) {
+            return ['err' => var_export($e, true)];
         }
     }
-
 
     public function recursiveDelete($dirPath)
     {
         try {
-            if(!empty($dirPath) && is_dir($dirPath)){
-                $dirObj= new \RecursiveDirectoryIterator($dirPath, \RecursiveDirectoryIterator::SKIP_DOTS); //@doc: upper dirs not included, otherwise DISASTER HAPPENS
+            if (!empty($dirPath) && is_dir($dirPath)) {
+                $dirObj = new \RecursiveDirectoryIterator($dirPath, \RecursiveDirectoryIterator::SKIP_DOTS); //@doc: upper dirs not included, otherwise DISASTER HAPPENS
                 $files = new \RecursiveIteratorIterator($dirObj, \RecursiveIteratorIterator::CHILD_FIRST);
                 foreach ($files as $path) {
                     $path->isDir() && !$path->isLink() ? rmdir($path->getPathname()) : unlink($path->getPathname());
@@ -131,29 +130,55 @@ class File implements File_i
                 return true;
             }
             return false;
-        } catch (\Exception $e) {
-            return ['err' => var_export($e,true)];
+        } catch (\Exception$e) {
+            return ['err' => var_export($e, true)];
         }
     }
 
     public function copySrcToDest($src, $dest, $formatRslt = false)
     {
         $cop = false;
-        if(file_exists($src) && is_dir(dirname($dest))){
-        $cop = copy($src, $dest);
+        if (file_exists($src) && is_dir(dirname($dest))) {
+            $cop = copy($src, $dest);
         }
-        if(!$formatRslt){
+        if (!$formatRslt) {
             return $cop;
         }
         return [$this->getRsltKeyword($cop) => $dest];
     }
 
-    
-    public function getRsltKeyword($boolish){
-        if(!empty($boolish)){
+    public function getRsltKeyword($boolish)
+    {
+        if (!empty($boolish)) {
             return 'success';
         }
         return 'err';
+    }
+
+    public function recursiveGlob($base, $pattern, $flags = 0)
+    {
+        $flags = $flags & ~GLOB_NOCHECK;
+
+        if (substr($base, -1) !== DIRECTORY_SEPARATOR) {
+            $base .= DIRECTORY_SEPARATOR;
+        }
+
+        $files = glob($base . $pattern, $flags);
+        if (!is_array($files)) {
+            $files = [];
+        }
+
+        $dirs = glob($base . '*', GLOB_ONLYDIR | GLOB_NOSORT | GLOB_MARK);
+        if (!is_array($dirs)) {
+            return $files;
+        }
+
+        foreach ($dirs as $dir) {
+            $dirFiles = glob_recursive($dir, $pattern, $flags);
+            $files = array_merge($files, $dirFiles);
+        }
+
+        return $files;
     }
 
 }

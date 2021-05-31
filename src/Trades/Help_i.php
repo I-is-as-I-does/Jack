@@ -9,6 +9,7 @@ interface Help_i
 
     public function isPostvInt($value);
     public function boolify($value);
+    public function isValidPattern($pattern);
 
     public function updateArray($basevalues, $updatevalues);
     public function reIndexArray($arr, $startAt = 0);

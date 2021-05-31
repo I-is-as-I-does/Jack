@@ -14,7 +14,14 @@ class Help implements Help_i
         return $updatevalues + $basevalues;
     }
 
-    
+    public function isValidPattern($pattern){  
+        $pattern ='/'.trim($pattern,'/').'/';  
+    if(@preg_match($pattern, null) === false){
+        return false;
+    }
+    return true;
+}
+
     public function flattenOutput($itm, $out = [], $key = ''){
         if (is_array($itm)) {
             foreach($itm as $k => $v){ 
