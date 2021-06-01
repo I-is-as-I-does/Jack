@@ -1,6 +1,6 @@
 <?php
-/* This file is part of JackTrades | (c) 2021 I-is-as-I-does */
-namespace SSITU\JackTrades\Trades;
+/* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
+namespace SSITU\Jack\Trades;
 
 class Time implements Time_i
 {
@@ -35,14 +35,14 @@ class Time implements Time_i
         $origin = date_create($origin);
         $interval = $origin->diff($target);
         $interval = $interval->format($format);
-        return (int)$interval;
+        return (int) $interval;
     }
 
     public function isValidTimezone($timezoneId)
     {
         try {
             new \DateTimeZone($timezoneId);
-        } catch (\Exception $e) {
+        } catch (\Exception$e) {
             return false;
         }
         return true;

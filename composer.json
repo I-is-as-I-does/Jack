@@ -1,23 +1,26 @@
 {
-    "name": "ssitu/jacktrades",
-    "description": "A minimal set of php classes-of-all-trades, also known as utils.",
-    "type": "library",
-    "keywords" :["php", "utils"],
-    "homepage":"https://github.com/I-is-as-I-does/JackTrades",
-    "license": "MIT",
-    "readme":"README.md",
-    "authors": [
-        {
-            "name": "I-is-as-I-does",
-            "email": "66915011+I-is-as-I-does@users.noreply.github.com"
-        }
-    ],
-    "minimum-stability": "stable",
-    "require": {},
-    "autoload": {
-        "psr-4": {
-            "SSITU\\JackTrades\\": "src",
-            "SSITU\\JackTrades\\Trades\\": "src/Trades"
-        }
+  "name": "ssitu/jacktrades",
+  "description": "A minimal set of php classes-of-all-trades, also known as utils.",
+  "type": "library",
+  "keywords": [
+    "php",
+    "utils"
+  ],
+  "homepage": "https://github.com/I-is-as-I-does/Jack",
+  "license": "MIT",
+  "readme": "README.md",
+  "authors": [
+    {
+      "name": "I-is-as-I-does",
+      "email": "66915011+I-is-as-I-does@users.noreply.github.com"
     }
+  ],
+  "minimum-stability": "stable",
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "SSITU\\Jack\\": "src",
+      "SSITU\\JackTrades\\": "src"
+    }
+  }
 }

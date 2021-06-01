@@ -1,6 +1,6 @@
 <?php
-/* This file is part of JackTrades | (c) 2021 I-is-as-I-does */
-namespace SSITU\JackTrades\Trades;
+/* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
+namespace SSITU\Jack\Trades;
 
 class Token implements Token_i
 {
@@ -25,14 +25,14 @@ class Token implements Token_i
         }
         return $search;
     }
-    
+
     public function withSecret($secretchar, $pool, $tokenlength)
     {
         if (!is_array($pool)) {
             $pool = str_split($pool);
         }
         $base = array_rand(array_flip($pool), $tokenlength);
-        $poz = rand(0, $tokenlength-1);
+        $poz = rand(0, $tokenlength - 1);
         $base[$poz] = $secretchar;
         return implode('', $base);
     }

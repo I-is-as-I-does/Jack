@@ -1,7 +1,7 @@
 <?php
-/* This file is part of JackTrades | SSITU | (c) 2021 I-is-as-I-does | MIT License */
+/* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 
-namespace SSITU\JackTrades\Trades;
+namespace SSITU\Jack\Trades;
 
 class Admin implements Admin_i
 {

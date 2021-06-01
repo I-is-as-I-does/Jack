@@ -1,6 +1,6 @@
 <?php
-/* This file is part of JackTrades | (c) 2021 I-is-as-I-does */
-namespace SSITU\JackTrades\Trades;
+/* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
+namespace SSITU\Jack\Trades;
 
 class Help implements Help_i
 {
@@ -14,26 +14,26 @@ class Help implements Help_i
         return $updatevalues + $basevalues;
     }
 
-    public function isValidPattern($pattern){  
-        $pattern ='/'.trim($pattern,'/').'/';  
-    if(@preg_match($pattern, null) === false){
-        return false;
+    public function isValidPattern($pattern)
+    {
+        $pattern = '/' . trim($pattern, '/') . '/';
+        if (@preg_match($pattern, null) === false) {
+            return false;
+        }
+        return true;
     }
-    return true;
-}
 
-    public function flattenOutput($itm, $out = [], $key = ''){
+    public function flattenOutput($itm, $out = [], $key = '')
+    {
         if (is_array($itm)) {
-            foreach($itm as $k => $v){ 
-                $out = $this->flattenOutput($v, $out, $key.'.'.$k);
+            foreach ($itm as $k => $v) {
+                $out = $this->flattenOutput($v, $out, $key . '.' . $k);
             }
+        } else {
+            $out[$key] = $itm;
         }
-        else {
-            $out[$key]= $itm;
-        }
-    return $out;
+        return $out;
     }
-
 
     public function boolify($value)
     {
@@ -68,17 +68,17 @@ class Help implements Help_i
     }
 
     public function arrayLongestItem($arr)
-    {if(!empty($arr)){
+    {if (!empty($arr)) {
         return max($this->arrayItemsStrlen($arr));
     }
-    return 0;
+        return 0;
     }
 
     public function arrayLongestKey($arr)
-    {if(!empty($arr)){
+    {if (!empty($arr)) {
         return max($this->arrayItemsStrlen(array_keys($arr)));
     }
-      return 0;
+        return 0;
     }
 
     public function arrayItemsStrlen($arr)

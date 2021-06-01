@@ -1,6 +1,6 @@
 <?php
-/* This file is part of JackTrades | (c) 2021 I-is-as-I-does */
-namespace SSITU\JackTrades\Trades;
+/* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
+namespace SSITU\Jack\Trades;
 
 class File implements File_i
 {
@@ -63,6 +63,11 @@ class File implements File_i
     public function getExt($path)
     {
         return strtolower(pathinfo($path, PATHINFO_EXTENSION));
+    }
+
+    public function reqTrailingSlash($dirPath)
+    {
+        return trim($dirPath, ' \n\r\t\v\0/\\') . '/';
     }
 
     public function readJson($path)
