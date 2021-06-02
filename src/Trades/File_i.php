@@ -5,6 +5,8 @@ namespace SSITU\Jack\Trades;
 
 interface File_i
 {
+  
+    public function copySrcToDest($src, $dest, $formatRslt = false);
     public function write($data, $path);
     public function buffrInclude($path);
     public function getContents($path);
@@ -17,4 +19,6 @@ interface File_i
     public function testReadWrite($paths);
     public function getRsltKeyword($boolish);
     public function recursiveGlob($base, $pattern, $flags = 0);
+    public function recursiveCopy($src, $dest, $excl = []);
+    public function recursiveDelete($dirPath);
 }

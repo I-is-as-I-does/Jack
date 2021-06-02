@@ -21,8 +21,8 @@ class Admin implements Admin_i
             password_hash("test", $algo, ["cost" => $cost]);
             $end = microtime(true);
         } while (($end - $start) < $timeTarget);
-  
-        return "Appropriate Cost Found: "  . $cost;
+
+        return "Appropriate Cost Found: " . $cost;
     }
 
     public function isAlive($url)
@@ -37,7 +37,6 @@ class Admin implements Admin_i
         return false;
     }
 
-
     public function getSubDomain($noWWW = true)
     {
         $splithost = explode('.', $_SERVER['HTTP_HOST']);
@@ -47,7 +46,7 @@ class Admin implements Admin_i
         }
         return $subdomain;
     }
-    
+
     public function serverInfos()
     {
         phpinfo(32);
@@ -56,6 +55,15 @@ class Admin implements Admin_i
     public function phpInfo()
     {
         phpinfo();
+    }
+
+    public function countInodes($path){//@doc: beware, this can be very slow
+        $objects = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+        $count=iterator_count($objects);
+        return number_format($count);
     }
 
     public function getDirSize($dir)
@@ -96,11 +104,20 @@ class Admin implements Admin_i
         }
     }
 
-    public function getAvailableSpace($dir, $maxGB) //@doc: $dir must be specified with __DIR__
-    {
-        $dirSize = $this->getDirSize($dir);
-        $sizeInGb = $dirSize/(1024*1024*1024);
-        $perct = ($sizeInGb*100)/$max;
-        return round(100-$perct, 2).' %';
+//@doc: $dir must be specified with __DIR__
+    public function getOccupiedSpace($dir)
+    {$dirSize = $this->getDirSize($dir);
+        $sizeInGb = $dirSize / (1024 * 1024 * 1024);
+        return round($sizeInGb, 2);
+    }
+
+//@doc: $dir must be specified with __DIR__
+    public function getAvailableSpace($dir, $maxGB, $prct = true)
+    {$sizeInGb = $this->getOccupiedSpace($dir);
+        if ($prct) {
+            $prctRslt = ($sizeInGb * 100) / $maxGB;
+            return round(100 - $prctRslt, 2);
+        }
+        return $maxGB - $sizeInGb;
     }
 }

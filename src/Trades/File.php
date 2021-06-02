@@ -118,7 +118,7 @@ class File implements File_i
             }
             closedir($dir);
             return $log;
-        } catch (\Exception$e) {
+        } catch (\Exception $e) {
             return ['err' => var_export($e, true)];
         }
     }
@@ -134,7 +134,7 @@ class File implements File_i
                 }
                 return true;
             }
-            return false;
+            return ['err' => 'unvalid dir. path: '.$dirPath];
         } catch (\Exception$e) {
             return ['err' => var_export($e, true)];
         }
