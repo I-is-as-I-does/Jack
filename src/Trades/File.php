@@ -101,24 +101,41 @@ class File implements File_i
         return $rslt;
     }
 
+    public function moveDir($src, $dest)
+    {
+        if (!is_dir($src) || $src === $dest) {
+            return false;
+        }
+        if (!is_dir(dirname($dest))) {
+            mkdir(dirname($dest), 0777, true);
+        }
+        return rename($src, $dest);
+    }
+
     public function recursiveCopy($src, $dest, $excl = [])
     {
         try {
             $dir = opendir($src);
             @mkdir($dest);
-            $log = [];
+            $errlog = [];
             while ($file = readdir($dir)) {
                 if (($file != '.') && ($file != '..') && (empty($excl) || !in_array($file, $excl))) {
                     if (is_dir($src . '/' . $file)) {
-                        $log[] = $this->recursiveCopy($src . '/' . $file, $dest . '/' . $file);
+                        $run = $this->recursiveCopy($src . '/' . $file, $dest . '/' . $file);
                     } else {
-                        $log[] = copy($src . '/' . $file, $dest . '/' . $file);
+                        $run = copy($src . '/' . $file, $dest . '/' . $file);
+                    }
+                    if ($run !== true) {
+                        $errlog[$file] = $run;
                     }
                 }
             }
             closedir($dir);
-            return $log;
-        } catch (\Exception $e) {
+            if (empty($errlog)) {
+                return true;
+            }
+            return $errlog;
+        } catch (\Exception$e) {
             return ['err' => var_export($e, true)];
         }
     }
@@ -134,7 +151,7 @@ class File implements File_i
                 }
                 return true;
             }
-            return ['err' => 'unvalid dir. path: '.$dirPath];
+            return ['err' => 'unvalid dir. path: ' . $dirPath];
         } catch (\Exception$e) {
             return ['err' => var_export($e, true)];
         }

@@ -6,6 +6,24 @@ namespace SSITU\Jack\Trades;
 class Admin implements Admin_i
 {
 
+    public function call($classObj, $subClassName, $subParam = [])
+    {
+        $classInfos = new \ReflectionClass($classObj);
+        $prop = $classInfos->getShortName() . $subClassName;
+        if (\property_exists($classObj, $prop)) {
+            if (empty($classObj->$prop)) {
+                $subClassName = $classInfos->getNamespaceName() . '\\' . $prop;
+                if (empty($subParam)) {
+                    $classObj->$prop = new $subClassName();
+                } else {
+                    $classObj->$prop = new $subClassName(...$subparam);
+                }
+            }
+            return $classObj->$prop;
+        }
+        return false;
+    }
+
     public function bestHashCost($timeTarget = 0.05, $cost = 8, $algo = PASSWORD_DEFAULT)
     {
 /** @source: www.php.net/manual
@@ -57,12 +75,13 @@ class Admin implements Admin_i
         phpinfo();
     }
 
-    public function countInodes($path){//@doc: beware, this can be very slow
+    public function countInodes($path)
+    { //@doc: beware, this can be very slow
         $objects = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($path),
             RecursiveIteratorIterator::SELF_FIRST
         );
-        $count=iterator_count($objects);
+        $count = iterator_count($objects);
         return number_format($count);
     }
 

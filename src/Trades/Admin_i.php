@@ -5,6 +5,7 @@ namespace SSITU\Jack\Trades;
 
 interface Admin_i
 {
+    public function call($classObj, $subClassName, $subParam = []);
     public function bestHashCost($timeTarget = 0.05, $cost = 8, $algo = '2y');
     public function isAlive($url);
     public function getSubDomain($noWWW = true);

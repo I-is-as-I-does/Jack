@@ -4,12 +4,24 @@ namespace SSITU\Jack\Trades;
 
 class Time implements Time_i
 {
+
+    public function isoStamp(){
+        return date("c");
+    }
+
     public function stamp($format = "Y-m-d H:i:s \G\M\TO")
     {
         return date($format);
     }
 
-    public function addTime($date, $interval, $format = "Y-m-d H:i:s \G\M\TO")
+    public function subTime($date, $interval, $format = "c")
+    {
+        $date = date_create($date);
+        date_sub($date, date_interval_create_from_date_string($interval));
+        return date_format($date, $format);
+    }
+
+    public function addTime($date, $interval, $format = "c")
     {
         $date = date_create($date);
         date_add($date, date_interval_create_from_date_string($interval));
@@ -72,7 +84,7 @@ class Time implements Time_i
     public function getInterval($origin, $target = null, $format = '%a')
     { //@doc: default format is: days
         if (empty($target)) {
-            $target = $this->stamp();
+            $target = $this->isoStamp();
         }
         $target = date_create($target);
         $origin = date_create($origin);

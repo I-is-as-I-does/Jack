@@ -21,4 +21,5 @@ interface File_i
     public function recursiveGlob($base, $pattern, $flags = 0);
     public function recursiveCopy($src, $dest, $excl = []);
     public function recursiveDelete($dirPath);
+    public function moveDir($src, $dest);
 }

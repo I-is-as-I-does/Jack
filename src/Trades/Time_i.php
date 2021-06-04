@@ -4,9 +4,13 @@ namespace SSITU\Jack\Trades;
 
 interface Time_i
 {
+    public function isoStamp();
     public function stamp($format = "Y-m-d H:i:s \G\M\TO");
+    public function subTime($date, $interval, $format = "c");
     public function addTime($date, $interval, $format = "Y-m-d H:i:s \G\M\TO");
     public function isExpired($givendate, $maxdate);
     public function getInterval($origin, $target, $format = '%a');
     public function isValidTimezone($timezoneId);
+    public function getRemainingTime($startDate, $count, $unit = 'day');
+    public function convertEngToFormat($unit);
 }
