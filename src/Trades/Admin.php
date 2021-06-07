@@ -6,24 +6,6 @@ namespace SSITU\Jack\Trades;
 class Admin implements Admin_i
 {
 
-    public function call($classObj, $subClassName, $subParam = [])
-    {
-        $classInfos = new \ReflectionClass($classObj);
-        $prop = $classInfos->getShortName() . $subClassName;
-        if (\property_exists($classObj, $prop)) {
-            if (empty($classObj->$prop)) {
-                $subClassName = $classInfos->getNamespaceName() . '\\' . $prop;
-                if (empty($subParam)) {
-                    $classObj->$prop = new $subClassName();
-                } else {
-                    $classObj->$prop = new $subClassName(...$subparam);
-                }
-            }
-            return $classObj->$prop;
-        }
-        return false;
-    }
-
     public function bestHashCost($timeTarget = 0.05, $cost = 8, $algo = PASSWORD_DEFAULT)
     {
 /** @source: www.php.net/manual
@@ -43,28 +25,6 @@ class Admin implements Admin_i
         return "Appropriate Cost Found: " . $cost;
     }
 
-    public function isAlive($url)
-    {
-        if (filter_var($url, FILTER_VALIDATE_URL)) {
-            $headers = @get_headers($url);
-            $resp_code = substr($headers[0], 9, 3);
-            if (intval($resp_code) > 0 && intval($resp_code) < 400) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public function getSubDomain($noWWW = true)
-    {
-        $splithost = explode('.', $_SERVER['HTTP_HOST']);
-        $subdomain = $splithost[0];
-        if ($noWWW && $subdomain === 'www') {
-            $subdomain = $splithost[1];
-        }
-        return $subdomain;
-    }
-
     public function serverInfos()
     {
         phpinfo(32);
@@ -75,68 +35,4 @@ class Admin implements Admin_i
         phpinfo();
     }
 
-    public function countInodes($path)
-    { //@doc: beware, this can be very slow
-        $objects = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($path),
-            RecursiveIteratorIterator::SELF_FIRST
-        );
-        $count = iterator_count($objects);
-        return number_format($count);
-    }
-
-    public function getDirSize($dir)
-    { // @author: André Fiedler
-        $dir = rtrim(str_replace('\\', '/', $dir), '/');
-
-        if (is_dir($dir) === true) {
-            $totalSize = 0;
-            $os = strtoupper(substr(PHP_OS, 0, 3));
-
-            // If on a Unix Host (Linux, Mac OS)
-            if ($os !== 'WIN') {
-                $io = popen('/usr/bin/du -sb ' . $dir, 'r');
-                if ($io !== false) {
-                    $totalSize = intval(fgets($io, 80));
-                    pclose($io);
-                    return $totalSize;
-                }
-            }
-            // If on a Windows Host (WIN32, WINNT, Windows)
-            if ($os === 'WIN' && extension_loaded('com_dotnet')) {
-                $obj = new \COM('scripting.filesystemobject');
-                if (is_object($obj)) {
-                    $ref = $obj->getfolder($dir);
-                    $totalSize = $ref->size;
-                    $obj = null;
-                    return $totalSize;
-                }
-            }
-            // If System calls did't work, use slower PHP 5
-            $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir));
-            foreach ($files as $file) {
-                $totalSize += $file->getSize();
-            }
-            return $totalSize;
-        } elseif (is_file($dir) === true) {
-            return filesize($dir);
-        }
-    }
-
-//@doc: $dir must be specified with __DIR__
-    public function getOccupiedSpace($dir)
-    {$dirSize = $this->getDirSize($dir);
-        $sizeInGb = $dirSize / (1024 * 1024 * 1024);
-        return round($sizeInGb, 2);
-    }
-
-//@doc: $dir must be specified with __DIR__
-    public function getAvailableSpace($dir, $maxGB, $prct = true)
-    {$sizeInGb = $this->getOccupiedSpace($dir);
-        if ($prct) {
-            $prctRslt = ($sizeInGb * 100) / $maxGB;
-            return round(100 - $prctRslt, 2);
-        }
-        return $maxGB - $sizeInGb;
-    }
 }

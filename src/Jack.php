@@ -2,47 +2,42 @@
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 namespace SSITU\Jack;
 
-class Jack implements Jack_i
+class Jack
 {
-    private static $token;
-    private static $file;
-    private static $help;
-    private static $time;
-    private static $admin;
+    private static $_this;
+    private $classMap = [];
 
-    public static function Admin()
+    public function __construct()
     {
-        if (empty(self::$admin)) {
-            self::$admin = new Trades\Admin();
+        self::$_this = $this;
+        $trades = glob(__DIR__ . '/Trades/*[!(_i)].php');
+        foreach ($trades as $trade) {
+            $this->classMap[basename($trade, '.php')] = null;
         }
-        return self::$admin;
     }
-    public static function Token()
+
+    public static function __callStatic($name, $arg)
     {
-        if (empty(self::$token)) {
-            self::$token = new Trades\Token();
-        }
-        return self::$token;
+        return self::inst()->call($name);
     }
-    public static function File()
+
+    private function call($name)
     {
-        if (empty(self::$file)) {
-            self::$file = new Trades\File();
+        if (!array_key_exists($name, $this->classMap)) {
+            return false;
         }
-        return self::$file;
+        if (empty($this->classMap[$name])) {
+            $subClassName = __NAMESPACE__ . '\\Trades\\' . $name;
+            $this->classMap[$name] = new $subClassName();
+        }
+        return $this->classMap[$name];
     }
-    public static function Help()
+
+    private static function inst()
     {
-        if (empty(self::$help)) {
-            self::$help = new Trades\Help();
+        if (empty(self::$this)) {
+            return new Jack();
         }
-        return self::$help;
-    }
-    public static function Time()
-    {
-        if (empty(self::$time)) {
-            self::$time = new Trades\Time();
-        }
-        return self::$time;
+        return self::$this;
     }
 }

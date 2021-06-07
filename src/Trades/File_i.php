@@ -12,14 +12,17 @@ interface File_i
     public function getContents($path);
     public function readIni($path);
     public function handleb64img($dataimg, $path = false);
-    public function getExt($path);
-    public function reqTrailingSlash($dirPath);
     public function readJson($path);
     public function saveJson($data, $path);
     public function testReadWrite($paths);
-    public function getRsltKeyword($boolish);
+    public function getExt($path);
+    public function reqTrailingSlash($dirPath);
     public function recursiveGlob($base, $pattern, $flags = 0);
     public function recursiveCopy($src, $dest, $excl = []);
     public function recursiveDelete($dirPath);
     public function moveDir($src, $dest);
+    public function countInodes($path);
+    public function getDirSize($dir);
+    public function getOccupiedSpace($dir);
+    public function getAvailableSpace($dir, $maxGB, $prct = true);
 }

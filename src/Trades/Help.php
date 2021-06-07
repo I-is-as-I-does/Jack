@@ -4,14 +4,11 @@ namespace SSITU\Jack\Trades;
 
 class Help implements Help_i
 {
+
+
     public function isPostvInt($value)
     { //  @doc works even if $value is a string-integer
         return ((is_int($value) || ctype_digit($value)) && (int) $value > 0);
-    }
-
-    public function updateArray($basevalues, $updatevalues)
-    {
-        return $updatevalues + $basevalues;
     }
 
     public function isValidPattern($pattern)
@@ -21,18 +18,6 @@ class Help implements Help_i
             return false;
         }
         return true;
-    }
-
-    public function flattenOutput($itm, $out = [], $key = '')
-    {
-        if (is_array($itm)) {
-            foreach ($itm as $k => $v) {
-                $out = $this->flattenOutput($v, $out, $key . '.' . $k);
-            }
-        } else {
-            $out[$key] = $itm;
-        }
-        return $out;
     }
 
     public function boolify($value)
@@ -58,31 +43,33 @@ class Help implements Help_i
         }
         return $r - 1;
     }
-
-    public function reIndexArray($arr, $startAt = 0)
+    public function getRsltKeyword($boolish)
     {
-        // @author: Peter Bailey
-        return (0 == $startAt)
-        ? array_values($arr)
-        : array_combine(range($startAt, count($arr) + ($startAt - 1)), array_values($arr));
+        if (!empty($boolish)) {
+            return 'success';
+        }
+        return 'err';
     }
 
-    public function arrayLongestItem($arr)
-    {if (!empty($arr)) {
-        return max($this->arrayItemsStrlen($arr));
-    }
-        return 0;
-    }
-
-    public function arrayLongestKey($arr)
-    {if (!empty($arr)) {
-        return max($this->arrayItemsStrlen(array_keys($arr)));
-    }
-        return 0;
-    }
-
-    public function arrayItemsStrlen($arr)
+    public function isAlive($url)
     {
-        return array_map('strlen', $arr);
+        if (filter_var($url, FILTER_VALIDATE_URL)) {
+            $headers = @get_headers($url);
+            $resp_code = substr($headers[0], 9, 3);
+            if (intval($resp_code) > 0 && intval($resp_code) < 400) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function getSubDomain($noWWW = true)
+    {
+        $splithost = explode('.', $_SERVER['HTTP_HOST']);
+        $subdomain = $splithost[0];
+        if ($noWWW && $subdomain === 'www') {
+            $subdomain = $splithost[1];
+        }
+        return $subdomain;
     }
 }
