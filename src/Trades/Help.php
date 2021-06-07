@@ -5,6 +5,12 @@ namespace SSITU\Jack\Trades;
 class Help implements Help_i
 {
 
+    public function isHTML($string){
+        if($string != strip_tags($string)){
+         return true;
+        }
+         return false;
+       }
 
     public function isPostvInt($value)
     { //  @doc works even if $value is a string-integer

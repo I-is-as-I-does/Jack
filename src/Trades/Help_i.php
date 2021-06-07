@@ -12,5 +12,6 @@ interface Help_i
     public function isAlive($url);
     public function getSubDomain($noWWW = true);
     public function getRsltKeyword($boolish);
+    public function isHTML($string);
 
 }

@@ -4,40 +4,16 @@ namespace SSITU\Jack;
 
 class Jack
 {
-    private static $_this;
-    private $classMap = [];
+ use \SSITU\Copperfield\SingletonFacadeOverload;
 
+    private $tradesPattern;
+    private $subNameSpace;
+    private $tradesArgm = [];
+    
     public function __construct()
     {
-        self::$_this = $this;
-        $trades = glob(__DIR__ . '/Trades/*[!(_i)].php');
-        foreach ($trades as $trade) {
-            $this->classMap[basename($trade, '.php')] = null;
-        }
+        $this->tradesPattern = __DIR__ . '/Trades/*[!(_i)].php';
+        $this->subNameSpace = __NAMESPACE__ . '\Trades';
     }
 
-    public static function __callStatic($name, $arg)
-    {
-        return self::inst()->call($name);
-    }
-
-    private function call($name)
-    {
-        if (!array_key_exists($name, $this->classMap)) {
-            return false;
-        }
-        if (empty($this->classMap[$name])) {
-            $subClassName = __NAMESPACE__ . '\\Trades\\' . $name;
-            $this->classMap[$name] = new $subClassName();
-        }
-        return $this->classMap[$name];
-    }
-
-    private static function inst()
-    {
-        if (empty(self::$this)) {
-            return new Jack();
-        }
-        return self::$this;
-    }
 }
