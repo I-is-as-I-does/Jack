@@ -4,6 +4,7 @@ namespace SSITU\Jack\Trades;
 
 interface Help_i
 {
+    public function UpCamelCase($string);
     public function num2alpha($n);
     public function alpha2num($a);
     public function isPostvInt($value);

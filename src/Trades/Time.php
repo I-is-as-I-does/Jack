@@ -102,4 +102,10 @@ class Time implements Time_i
         }
         return true;
     }
+
+    
+    public function timezonesList(){
+        return \DateTimeZone::listIdentifiers(\DateTimeZone::ALL);
+    }
+
 }

@@ -5,12 +5,20 @@ namespace SSITU\Jack\Trades;
 class Help implements Help_i
 {
 
-    public function isHTML($string){
-        if($string != strip_tags($string)){
-         return true;
+    public function UpCamelCase($string)
+    {
+        $splt = preg_split('/[^A-Za-z0-9]+|(?=[A-Z])/', $string);
+        $splt = array_map('ucfirst', $splt);
+        return implode('', $splt);
+    }
+
+    public function isHTML($string)
+    {
+        if ($string != strip_tags($string)) {
+            return true;
         }
-         return false;
-       }
+        return false;
+    }
 
     public function isPostvInt($value)
     { //  @doc works even if $value is a string-integer
