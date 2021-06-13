@@ -4,6 +4,9 @@ namespace SSITU\Jack\Trades;
 
 interface Arrays_i
 {
+
+    public function allItemsAreInt($array);
+    public function allItemsAreString($array);
     public function merge($originValues, $newValues);
     public function reIndex($arr, $startAt = 0);
 

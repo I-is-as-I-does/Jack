@@ -5,6 +5,38 @@ namespace SSITU\Jack\Trades;
 class Help implements Help_i
 {
 
+    public function b64pad($value, $pad = '=') {
+        while (strlen($value) % 4 > 0) {
+          $value .= $pad;
+        }
+        return $value;
+      }
+    
+ 
+    public function randomBool(){
+        return (bool)random_int(0, 1);
+    }
+    
+    public function multRandLetters($count, $case = 'random'){
+        $out = '';   
+        for($c = 0;$c < $count; $c++){
+            $out .= $this->randLetter($case);
+        }
+        return $out;
+    }
+    
+    public function randLetter($case = 'random') {
+    $a_z = "abcdefghijklmnopqrstuvwxyz";
+    $rand_letter = $a_z[random_int(0, 25)];
+    if($case == 'random'){
+        $case = $this->randomBool();
+    }
+    if($case == true || $case == 'upper'){
+        return strtoupper($rand_letter);
+    } 
+    return $rand_letter;
+  }
+
     public function UpCamelCase($string)
     {
         $splt = preg_split('/[^A-Za-z0-9]+|(?=[A-Z])/', $string);
@@ -65,25 +97,5 @@ class Help implements Help_i
         return 'err';
     }
 
-    public function isAlive($url)
-    {
-        if (filter_var($url, FILTER_VALIDATE_URL)) {
-            $headers = @get_headers($url);
-            $resp_code = substr($headers[0], 9, 3);
-            if (intval($resp_code) > 0 && intval($resp_code) < 400) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public function getSubDomain($noWWW = true)
-    {
-        $splithost = explode('.', $_SERVER['HTTP_HOST']);
-        $subdomain = $splithost[0];
-        if ($noWWW && $subdomain === 'www') {
-            $subdomain = $splithost[1];
-        }
-        return $subdomain;
-    }
+   
 }

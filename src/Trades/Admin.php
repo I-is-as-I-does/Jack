@@ -35,4 +35,9 @@ class Admin implements Admin_i
         phpinfo();
     }
 
+    public function hashAdminKey($adminKey){
+        return password_hash($adminKey, PASSWORD_BCRYPT);
+    }
+
+   
 }

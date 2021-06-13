@@ -2,8 +2,11 @@
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 namespace SSITU\Jack\Trades;
 
+
 class Token implements Token_i
 {
+
+
     public function timeBased()
     {
         return md5(uniqid(microtime(), true));

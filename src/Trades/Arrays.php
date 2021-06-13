@@ -4,6 +4,15 @@ namespace SSITU\Jack\Trades;
 
 class Arrays implements Arrays_i
 {
+
+    public function allItemsAreInt($array) {
+        return array_filter($array, 'is_int') === $array;
+    }
+
+    public function allItemsAreString($array) {
+        return array_filter($array, 'is_string') === $array;
+    }
+
     public function merge($originValues, $newValues)
     {
         return $newValues + $originValues;

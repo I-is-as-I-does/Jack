@@ -4,14 +4,16 @@ namespace SSITU\Jack\Trades;
 
 interface Help_i
 {
+    public function b64pad($value, $pad = '=');
+    public function randomBool();
+    public function randLetter($case = 'random');
+    public function multRandLetters($count, $case = 'random');
     public function UpCamelCase($string);
     public function num2alpha($n);
     public function alpha2num($a);
     public function isPostvInt($value);
     public function boolify($value);
     public function isValidPattern($pattern);
-    public function isAlive($url);
-    public function getSubDomain($noWWW = true);
     public function getRsltKeyword($boolish);
     public function isHTML($string);
 
