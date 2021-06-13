@@ -2,7 +2,7 @@
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 namespace SSITU\Jack\Trades;
 
-use SSITU\Jack\Jack;
+use \SSITU\Jack\Jack;
 
 class File implements File_i
 {
@@ -200,9 +200,9 @@ class File implements File_i
 
     public function countInodes($path)
     { //@doc: beware, this can be very slow
-        $objects = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($path),
-            RecursiveIteratorIterator::SELF_FIRST
+        $objects = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path),
+            \RecursiveIteratorIterator::SELF_FIRST
         );
         $count = iterator_count($objects);
         return number_format($count);
