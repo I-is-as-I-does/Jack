@@ -204,8 +204,7 @@ class File implements File_i
             new \RecursiveDirectoryIterator($path),
             \RecursiveIteratorIterator::SELF_FIRST
         );
-        $count = iterator_count($objects);
-        return number_format($count);
+        return iterator_count($objects);
     }
 
     public function getDirSize($dir)

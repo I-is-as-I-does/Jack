@@ -5,11 +5,13 @@ namespace SSITU\Jack\Trades;
 class Arrays implements Arrays_i
 {
 
-    public function allItemsAreInt($array) {
+    public function allItemsAreInt($array)
+    {
         return array_filter($array, 'is_int') === $array;
     }
 
-    public function allItemsAreString($array) {
+    public function allItemsAreString($array)
+    {
         return array_filter($array, 'is_string') === $array;
     }
 
@@ -22,7 +24,7 @@ class Arrays implements Arrays_i
     {
         if (is_array($itm)) {
             foreach ($itm as $k => $v) {
-                $out = $this->flatten($v, $out, $key . '.' . $k);
+                $out = $this->flatten($v, $out, trim($key . '.' . $k, '.'));
             }
         } else {
             $out[$key] = $itm;
