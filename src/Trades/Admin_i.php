@@ -9,5 +9,4 @@ interface Admin_i
     public function serverInfos();
     public function phpInfo();
     public function hashAdminKey($adminKey);
-    public function generateCryptKey($bytes = 32);
 }

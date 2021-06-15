@@ -35,11 +35,6 @@ class Admin implements Admin_i
         phpinfo();
     }
 
-    public function generateCryptKey($bytes = 32)
-    {
-        return bin2hex(random_bytes($bytes));
-    }
-
     public function hashAdminKey($adminKey){
         return password_hash($adminKey, PASSWORD_BCRYPT);
     }

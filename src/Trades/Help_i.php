@@ -4,6 +4,8 @@ namespace SSITU\Jack\Trades;
 
 interface Help_i
 {
+    public function filterBool($var);
+    public function filterValue($var, $filter = FILTER_SANITIZE_STRING);
     public function b64pad($value, $pad = '=');
     public function randomBool();
     public function randLetter($case = 'random');

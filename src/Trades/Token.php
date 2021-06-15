@@ -2,6 +2,7 @@
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 namespace SSITU\Jack\Trades;
 
+use \SSITU\Jack\Jack;
 
 class Token implements Token_i
 {
@@ -43,5 +44,33 @@ class Token implements Token_i
     public function b64basic($bytes = 64)
     {
         return base64_encode(random_bytes($bytes));
+    }
+
+    
+    public function hexBytes($bytes = 32)
+    {
+        return bin2hex(random_bytes($bytes));
+    }
+
+    public function passType($length = 32){
+        if($length < 8){
+            $length = 8;
+        }
+        $methods = ['randLetter',
+        'randomDigit',
+        'randomSpeChar',
+        'randLetter'];
+        $tok = '';
+        foreach($methods as $method){
+            $tok .= Jack::Help()->$method();
+            $length--;
+        }
+        while($length > 0){
+            $randMethod = $methods[random_int(0, 3)];
+            $tok .= Jack::Help()->$randMethod();
+            $length--;
+        }
+        
+        return str_shuffle($tok);
     }
 }

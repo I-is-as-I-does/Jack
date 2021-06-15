@@ -5,6 +5,24 @@ namespace SSITU\Jack\Trades;
 class Help implements Help_i
 {
 
+    public function filterBool($var)
+    {
+        $san = filter_var($var, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        if ($san === null) {
+            return false;
+        }
+        return true;
+    }
+
+    public function filterValue($var, $filter = FILTER_SANITIZE_STRING)
+    {
+        $san = filter_var($var, $filter);
+        if ($san == $var) {
+            return true;
+        }
+        return false;
+    }
+
     public function b64pad($value, $pad = '=') {
         while (strlen($value) % 4 > 0) {
           $value .= $pad;
@@ -15,6 +33,15 @@ class Help implements Help_i
  
     public function randomBool(){
         return (bool)random_int(0, 1);
+    }
+
+    public function randomDigit(){
+        return random_int(0, 9);
+    }
+
+    public function randomSpeChar(){
+        $speChars = '*&!@%^#$';
+       return $speChars[random_int(0, 7)];
     }
     
     public function multRandLetters($count, $case = 'random'){
@@ -65,6 +92,7 @@ class Help implements Help_i
         }
         return true;
     }
+
 
     public function boolify($value)
     {
