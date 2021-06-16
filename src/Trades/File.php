@@ -191,7 +191,7 @@ class File implements File_i
         }
 
         foreach ($dirs as $dir) {
-            $dirFiles = glob_recursive($dir, $pattern, $flags);
+            $dirFiles = $this->recursiveGlob($dir, $pattern, $flags);
             $files = array_merge($files, $dirFiles);
         }
 
