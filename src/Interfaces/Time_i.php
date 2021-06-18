@@ -1,6 +1,6 @@
 <?php
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
-namespace SSITU\Jack\Trades;
+namespace SSITU\Jack\Interfaces;
 
 interface Time_i
 {
@@ -14,4 +14,5 @@ interface Time_i
     public function convertEngToFormat($unit);
     public function isValidTimezone($timezoneId);
     public function timezonesList();
+    public function isFuture($date);
 }

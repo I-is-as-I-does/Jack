@@ -1,7 +1,7 @@
 <?php
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 
-namespace SSITU\Jack\Trades;
+namespace SSITU\Jack\Interfaces;
 
 interface File_i
 {
@@ -11,7 +11,6 @@ interface File_i
     public function buffrInclude($path);
     public function getContents($path);
     public function readIni($path);
-    public function handleb64img($dataimg, $path = false);
     public function readJson($path);
     public function saveJson($data, $path);
     public function testReadWrite($paths);

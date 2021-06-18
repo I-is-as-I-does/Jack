@@ -3,6 +3,8 @@
 
 namespace SSITU\Jack\Trades;
 
+use \SSITU\Jack\Interfaces\Admin_i;
+
 class Admin implements Admin_i
 {
 

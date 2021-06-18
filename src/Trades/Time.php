@@ -2,10 +2,13 @@
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 namespace SSITU\Jack\Trades;
 
+use \SSITU\Jack\Interfaces\Time_i;
+
 class Time implements Time_i
 {
 
-    public function isoStamp(){
+    public function isoStamp()
+    {
         return date("c");
     }
 
@@ -30,12 +33,47 @@ class Time implements Time_i
 
     public function isExpired($givendate, $maxdate)
     {
-        $givendate = new \DateTime($givendate);
-        $maxdate = new \DateTime($maxdate);
-        if ($givendate < $maxdate) {
-            return false;
+        try {
+            $givendate = new \DateTime($givendate);
+            $maxdate = new \DateTime($maxdate);
+            if ($givendate < $maxdate) {
+                return false;
+            }
+            return true;
+        } catch (\Exception$e) {
+            return null;
         }
-        return true;
+    }
+
+    public function isInRange($date, $min, $max = "now")
+    {
+        try {
+       $max = new \DateTime($max);
+       $min = new \DateTime($min);
+       $date = new \DateTime($date);
+            if($date < $max && $date > $min){
+                return true;
+            }
+            return false;
+
+    } catch (\Exception$e) {
+        return null;
+    }
+      
+    }
+
+    public function isFuture($date)
+    {
+        try {
+            $date = new \DateTime($date);
+            if ($date > new \DateTime()) {
+                return true;
+            }
+
+            return false;
+        } catch (\Exception$e) {
+            return null;
+        }
     }
 
     public function convertEngToFormat($unit)
@@ -66,7 +104,7 @@ class Time implements Time_i
     public function getRemainingTime($startDate, $count, $unit = 'day')
     {
         $format = $this->convertEngToFormat($unit);
-        if($format === false){
+        if ($format === false) {
             return false;
         }
         $startDate = date_create($startDate);
@@ -103,8 +141,8 @@ class Time implements Time_i
         return true;
     }
 
-    
-    public function timezonesList(){
+    public function timezonesList()
+    {
         return \DateTimeZone::listIdentifiers(\DateTimeZone::ALL);
     }
 

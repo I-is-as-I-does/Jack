@@ -2,6 +2,9 @@
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 namespace SSITU\Jack\Trades;
 
+use \SSITU\Jack\Interfaces\Help_i;
+
+
 class Help implements Help_i
 {
 
@@ -23,13 +26,9 @@ class Help implements Help_i
         return false;
     }
 
-    public function b64pad($value, $pad = '=') {
-        while (strlen($value) % 4 > 0) {
-          $value .= $pad;
-        }
-        return $value;
-      }
-    
+    public function intlen($int){
+       return $int !== 0 ? floor(log10($int) + 1) : 1; 
+    }
  
     public function randomBool(){
         return (bool)random_int(0, 1);

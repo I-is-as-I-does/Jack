@@ -2,6 +2,8 @@
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 namespace SSITU\Jack\Trades;
 
+use \SSITU\Jack\Interfaces\Arrays_i;
+
 class Arrays implements Arrays_i
 {
 

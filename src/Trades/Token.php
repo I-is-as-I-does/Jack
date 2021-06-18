@@ -3,6 +3,8 @@
 namespace SSITU\Jack\Trades;
 
 use \SSITU\Jack\Jack;
+use \SSITU\Jack\Interfaces\Token_i;
+
 
 class Token implements Token_i
 {

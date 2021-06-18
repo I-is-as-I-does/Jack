@@ -3,6 +3,8 @@
 namespace SSITU\Jack\Trades;
 
 use \SSITU\Jack\Jack;
+use \SSITU\Jack\Interfaces\File_i;
+
 
 class File implements File_i
 {
@@ -43,24 +45,6 @@ class File implements File_i
             return parse_ini_file($path);
         }
         return false;
-    }
-
-    public function handleb64img($dataimg, $path = false)
-    {
-        if (stripos($dataimg, 'data:image/png;base64,') === false) {
-            return false;
-        }
-
-        $dataimg = str_replace('data:image/png;base64,', '', $dataimg);
-        $dataimg = str_replace(' ', '+', $dataimg);
-        $decdimg = base64_decode($dataimg);
-
-        if ($path === false) {
-            // @doc: returns bin img; false if b64 data is not a valid image
-            return imagecreatefromstring($decdimg);
-        }
-        //@doc: $path should be .png
-        return $this->write($decdimg, $path);
     }
 
     public function getExt($path)

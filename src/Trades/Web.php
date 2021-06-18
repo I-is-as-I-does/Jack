@@ -3,6 +3,9 @@
 
 namespace SSITU\Jack\Trades;
 
+use \SSITU\Jack\Interfaces\Web_i;
+
+
 class Web implements Web_i
 {
 
