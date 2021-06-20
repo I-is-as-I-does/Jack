@@ -38,8 +38,8 @@ class Help implements Help_i
         return random_int(0, 9);
     }
 
-    public function randomSpeChar(){
-        $speChars = '*&!@%^#$';
+    public function randomSpeChar($speChars = '*&!@%^#$'){
+        
        return $speChars[random_int(0, 7)];
     }
     

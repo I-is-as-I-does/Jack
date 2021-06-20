@@ -10,5 +10,5 @@ interface Token_i
     public function withSecret($secretchar, $pool, $tokenlength);
     public function b64basic($bytes = 64);
     public function hexBytes($bytes = 32);
-    public function passType($length = 32);
+    public function passType($bytes = 32, $speChars = '*&!@%^#$');
 }

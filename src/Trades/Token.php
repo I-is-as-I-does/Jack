@@ -2,13 +2,11 @@
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 namespace SSITU\Jack\Trades;
 
-use \SSITU\Jack\Jack;
 use \SSITU\Jack\Interfaces\Token_i;
-
+use \SSITU\Jack\Jack;
 
 class Token implements Token_i
 {
-
 
     public function timeBased()
     {
@@ -48,31 +46,31 @@ class Token implements Token_i
         return base64_encode(random_bytes($bytes));
     }
 
-    
     public function hexBytes($bytes = 32)
     {
         return bin2hex(random_bytes($bytes));
     }
 
-    public function passType($length = 32){
-        if($length < 8){
-            $length = 8;
+    public function passType($bytes = 32, $speChars = '*&!@%^#$')
+    {
+        if ($bytes < 8) {
+            $bytes = 8;
         }
-        $methods = ['randLetter',
-        'randomDigit',
-        'randomSpeChar',
-        'randLetter'];
+
+        $methods = ['randLetter' => 'random',
+            'randomDigit' => null,
+            'randomSpeChar' => $speChars];
         $tok = '';
-        foreach($methods as $method){
-            $tok .= Jack::Help()->$method();
-            $length--;
+        foreach ($methods as $method => $arg) {
+            $tok .= Jack::Help()->$method(...[$arg]);
         }
-        while($length > 0){
-            $randMethod = $methods[random_int(0, 3)];
-            $tok .= Jack::Help()->$randMethod();
-            $length--;
+
+        while (strlen($tok) != $bytes) {
+            $randMethod = array_rand($methods);
+            $arg = $methods[$randMethod];
+            $tok .= Jack::Help()->$randMethod(...[$arg]);
         }
-        
+
         return str_shuffle($tok);
     }
 }
