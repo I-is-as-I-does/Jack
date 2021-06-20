@@ -7,6 +7,11 @@ use \SSITU\Jack\Interfaces\Arrays_i;
 class Arrays implements Arrays_i
 {
 
+    public function allItemsAreEmpty($array)
+    {
+        return array_filter($array, function($itm){ return empty($itm);}) === $array;
+    }
+
     public function allItemsAreInt($array)
     {
         return array_filter($array, 'is_int') === $array;

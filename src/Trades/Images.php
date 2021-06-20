@@ -10,10 +10,10 @@ class Images
     public function b64ToRsrc($dataimg)
     {
         $decdimg = $this->decodeb64($dataimg);
-        if($decdimg !== false){
+        if ($decdimg !== false) {
             return imagecreatefromstring($decdimg);
         }
-       return false;
+        return false;
     }
 
     public function saveb64InPng($dataimg, $path)
@@ -34,13 +34,40 @@ class Images
     }
 
     public function fileTob64($path)
-    {    
+    {
         $data = Jack::File()->getContents($path);
-        if(!empty($data)){
+        if (!empty($data)) {
             $type = Jack::File()->getExt($path);
             return 'data:image/' . $type . ';base64,' . base64_encode($data);
         }
         return false;
+    }
+
+    public function fileToRsc($path)
+    {
+        $ext = Jack::File()->getExt($path);
+        if ($ext === 'jpg') {
+            $ext = 'jpeg';
+        }
+        switch ($ext) {
+            case 'png':
+                $rscImg = imagecreatefrompng($path);
+                break;
+            case 'gif':
+                $rscImg = imagecreatefromgif($path);
+                break;
+            case 'webp':
+                $rscImg = imagecreatefromwebp($path);
+                break;
+            case 'jpeg':
+                $rscImg = imagecreatefromjpeg($path);
+                break;
+            default:
+                $rscImg = false;
+
+        }
+        return $rscImg;
+
     }
 
     public function rsrcTob64png($img)

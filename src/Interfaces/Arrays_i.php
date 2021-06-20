@@ -4,7 +4,7 @@ namespace SSITU\Jack\Interfaces;
 
 interface Arrays_i
 {
-
+    public function allItemsAreEmpty($array);
     public function allItemsAreInt($array);
     public function allItemsAreString($array);
     public function merge($originValues, $newValues);
