@@ -2,7 +2,6 @@
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 namespace SSITU\Jack\Trades;
 
-use \SSITU\Jack\Interfaces\Token_i;
 use \SSITU\Jack\Jack;
 
 class Token implements Token_i

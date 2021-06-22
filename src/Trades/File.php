@@ -3,8 +3,6 @@
 namespace SSITU\Jack\Trades;
 
 use \SSITU\Jack\Jack;
-use \SSITU\Jack\Interfaces\File_i;
-
 
 class File implements File_i
 {

@@ -2,24 +2,22 @@
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 namespace SSITU\Jack\Trades;
 
-use \SSITU\Jack\Interfaces\Arrays_i;
-
 class Arrays implements Arrays_i
 {
 
-    public function allItemsAreEmpty($array)
+    public function allItemsAreEmpty($arr)
     {
-        return array_filter($array, function($itm){ return empty($itm);}) === $array;
+        return array_filter($arr, function ($itm) {return empty($itm);}) === $arr;
     }
 
-    public function allItemsAreInt($array)
+    public function allItemsAreInt($arr)
     {
-        return array_filter($array, 'is_int') === $array;
+        return array_filter($arr, 'is_int') === $arr;
     }
 
-    public function allItemsAreString($array)
+    public function allItemsAreString($arr)
     {
-        return array_filter($array, 'is_string') === $array;
+        return array_filter($arr, 'is_string') === $arr;
     }
 
     public function merge($originValues, $newValues)

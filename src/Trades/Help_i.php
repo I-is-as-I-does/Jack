@@ -1,12 +1,14 @@
 <?php
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
-namespace SSITU\Jack\Interfaces;
+namespace SSITU\Jack\Trades;
 
 interface Help_i
 {
     public function filterBool($var);
     public function filterValue($var, $filter = FILTER_SANITIZE_STRING);
     public function randomBool();
+    public function randomDigit();
+    public function randomSpeChar($speChars = '*&!@%^#$');
     public function randLetter($case = 'random');
     public function multRandLetters($count, $case = 'random');
     public function UpCamelCase($string);

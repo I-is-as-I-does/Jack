@@ -5,17 +5,13 @@ namespace SSITU\Jack\Trades;
 use \SSITU\Jack\Jack;
 
 class Images
-{
-
-   
+{  
 
     public function saveb64InPng($dataimg, $path)
     {
         $decdimg = $this->decodeb64($dataimg);
         return Jack::File()->write($decdimg, $path);
-    }
-
-    
+    }  
 
     public function fileTob64($path)
     {
@@ -27,6 +23,5 @@ class Images
         return false;
     }
 
-   
 
 }

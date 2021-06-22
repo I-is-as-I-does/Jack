@@ -3,8 +3,6 @@
 
 namespace SSITU\Jack\Trades;
 
-use \SSITU\Jack\Interfaces\Admin_i;
-
 class Admin implements Admin_i
 {
 
@@ -37,9 +35,9 @@ class Admin implements Admin_i
         phpinfo();
     }
 
-    public function hashAdminKey($adminKey){
+    public function hashAdminKey($adminKey)
+    {
         return password_hash($adminKey, PASSWORD_BCRYPT);
     }
 
-   
 }
