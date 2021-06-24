@@ -5,6 +5,27 @@ namespace SSITU\Jack\Trades;
 class Arrays implements Arrays_i
 {
 
+    public function sortNestedByKey($arr, $key)
+    {
+
+        uasort($arr, function ($a, $b) use ($key) {
+            if ($a[$key] == $b[$key]) {
+                return 0;
+            }
+
+            return ($a[$key] > $b[$key]) ? 1 : -1;
+        });
+        return $arr;
+    }
+
+    public function sortByKey($arr, $key)
+    {
+
+        $col = array_column($arr, $key);
+        array_multisort($col, SORT_ASC, $arr);
+        return $arr;
+    }
+
     public function allItemsAreEmpty($arr)
     {
         return array_filter($arr, function ($itm) {return empty($itm);}) === $arr;

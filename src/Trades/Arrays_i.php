@@ -4,6 +4,8 @@ namespace SSITU\Jack\Trades;
 
 interface Arrays_i
 {
+    public function sortNestedByKey($arr, $key);
+    public function sortByKey($arr, $key);
     public function allItemsAreEmpty($arr);
     public function allItemsAreInt($arr);
     public function allItemsAreString($arr);
