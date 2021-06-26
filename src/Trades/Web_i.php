@@ -5,6 +5,7 @@ namespace SSITU\Jack\Trades;
 
 interface Web_i
 {
+    public function redirect($url);
     public function getProtocol();
     public function isAlive($url);
     public function getSubDomain($noWWW = true);

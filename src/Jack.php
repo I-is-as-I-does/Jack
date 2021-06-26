@@ -4,7 +4,7 @@ namespace SSITU\Jack;
 
 class Jack
 {
- use \SSITU\Copperfield\SingletonFacadeOverload;
+ use \SSITU\Copperfield\SingletonOverload;
     
     public function __construct()
     {

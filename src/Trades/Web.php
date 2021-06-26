@@ -6,6 +6,12 @@ namespace SSITU\Jack\Trades;
 class Web implements Web_i
 {
 
+    public function redirect($url)
+    {
+        header('Location: ' . $url);
+        exit;
+    }
+
     public function getProtocol()
     {
         $protoc = 'http';
