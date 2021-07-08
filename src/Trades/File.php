@@ -19,8 +19,8 @@ class File implements File_i
         return [Jack::Help()->getRsltKeyword($write) => $path];
     }
 
-    public function buffrInclude($path)
-    { //@doc !if vars inside content, be aware that they will not be defined >here<
+    public function buffrInclude($path, $v_ = [])
+    { 
         if (file_exists($path)) {
             ob_start();
             include $path;
@@ -92,7 +92,7 @@ class File implements File_i
             return false;
         }
         if (!is_dir(dirname($dest))) {
-            mkdir(dirname($dest), 0777, true);
+            @mkdir(dirname($dest), 0777, true);
         }
         return rename($src, $dest);
     }
@@ -125,6 +125,11 @@ class File implements File_i
         }
     }
 
+    public function patternDelete($globPattern, $flag = 0)
+    {
+       return array_map('unlink', glob($globPattern, $flag));
+    }
+
     public function recursiveDelete($dirPath)
     {
         try {
@@ -132,7 +137,7 @@ class File implements File_i
                 $dirObj = new \RecursiveDirectoryIterator($dirPath, \RecursiveDirectoryIterator::SKIP_DOTS); //@doc: upper dirs not included, otherwise DISASTER HAPPENS
                 $files = new \RecursiveIteratorIterator($dirObj, \RecursiveIteratorIterator::CHILD_FIRST);
                 foreach ($files as $path) {
-                    $path->isDir() && !$path->isLink() ? rmdir($path->getPathname()) : unlink($path->getPathname());
+                    $path->isDir() && !$path->isLink() ? @rmdir($path->getPathname()) : @unlink($path->getPathname());
                 }
                 return true;
             }

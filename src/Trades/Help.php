@@ -5,6 +5,24 @@ namespace SSITU\Jack\Trades;
 class Help implements Help_i
 {
 
+    
+    public function isValidHexColor($hexCode){
+        return !empty(preg_match("/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/", $hexCode));
+    }
+
+    public function resolveHexColor($hexCode)
+    {
+        if(!empty($hexCode) && is_string($hexCode)){
+            if ($hexCode[0] != '#'){
+                $hexCode = '#'.$hexCode;
+            }
+          if($this->isValidHexColor($hexCode)){
+              return $hexCode;
+          }         
+        }
+        return false;
+    }
+
     public function filterBool($var)
     {
         $san = filter_var($var, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);

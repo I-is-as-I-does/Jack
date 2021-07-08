@@ -32,8 +32,8 @@ class Time implements Time_i
     public function isExpired($givendate, $maxdate)
     {
         try {
-            $givendate = new \DateTime($givendate);
-            $maxdate = new \DateTime($maxdate);
+            $givendate = date_create($givendate);
+            $maxdate = date_create($maxdate);
             if ($givendate < $maxdate) {
                 return false;
             }
@@ -46,9 +46,9 @@ class Time implements Time_i
     public function isInRange($date, $min, $max = "now")
     {
         try {
-       $max = new \DateTime($max);
-       $min = new \DateTime($min);
-       $date = new \DateTime($date);
+       $max = date_create($max);
+       $min = date_create($min);
+       $date = date_create($date);
             if($date < $max && $date > $min){
                 return true;
             }
@@ -63,8 +63,8 @@ class Time implements Time_i
     public function isFuture($date)
     {
         try {
-            $date = new \DateTime($date);
-            if ($date > new \DateTime()) {
+            $date = date_create($date);
+            if ($date > date_create()) {
                 return true;
             }
 
@@ -99,7 +99,8 @@ class Time implements Time_i
         return false;
     }
 
-    public function getRemainingTime($startDate, $count, $unit = 'day')
+
+    public function countRemainingTime($startDate, $count, $unit = 'day')
     {
         $format = $this->convertEngToFormat($unit);
         if ($format === false) {
@@ -109,9 +110,15 @@ class Time implements Time_i
         $lapse = date_interval_create_from_date_string($count . ' ' . $unit);
         $targetDate = date_add($startDate, $lapse);
         $now = date_create();
-        $diff = date_diff($now, $targetDate);
-        $output = date_interval_format($diff, $format);
-        if ($now > $targetDate) {
+        return $this->relativeInterval($now, $targetDate, $format);
+    }
+
+    public function relativeInterval($originDate, $targetDate, $format) 
+    {
+        //@doc: here, dates must be date objects
+        $interval = date_diff($originDate, $targetDate);
+        $output = (int)date_interval_format($interval, $format);
+        if ($originDate > $targetDate) {
             return -$output;
         }
         return $output;
@@ -124,9 +131,7 @@ class Time implements Time_i
         }
         $target = date_create($target);
         $origin = date_create($origin);
-        $interval = $origin->diff($target);
-        $interval = $interval->format($format);
-        return (int) $interval;
+        return $this->relativeInterval($origin, $target, $format);
     }
 
     public function isValidTimezone($timezoneId)

@@ -18,18 +18,44 @@ class Arrays implements Arrays_i
         return $arr;
     }
 
-    public function sortByKey($arr, $key)
+    public function sortByKey($arr, $key, $order = SORT_ASC)
     {
 
         $col = array_column($arr, $key);
-        array_multisort($col, SORT_ASC, $arr);
+        array_multisort($col, $order, $arr);
         return $arr;
+    }
+
+    public function emptyItmsKeys($arr)
+    {
+        return array_keys($this->filterNonEmptyItms($arr));
+    }
+
+    public function filterEmptyItms($arr)
+    {
+        return array_filter($arr, function ($itm) {return !empty($itm);});
+    }
+
+    public function filterNonEmptyItms($arr)
+    {
+        return array_filter($arr, function ($itm) {return empty($itm);});
     }
 
     public function allItemsAreEmpty($arr)
     {
-        return array_filter($arr, function ($itm) {return empty($itm);}) === $arr;
+        return $this->filterNonEmptyItms($arr) === $arr;
     }
+
+    public function noItemsAreEmpty($arr)
+    {
+        return $this->filterEmptyItms($arr) === $arr;
+    }
+
+    public function countEmptyItms($arr)
+    {
+        return count($this->filterNonEmptyItms($arr));
+    }
+
 
     public function allItemsAreInt($arr)
     {

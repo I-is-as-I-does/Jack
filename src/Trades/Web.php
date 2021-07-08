@@ -37,6 +37,7 @@ class Web implements Web_i
 
     public function getSubDomain($noWWW = true)
     {
+        //@todo:change or delete: invalid
         $splithost = explode('.', $_SERVER['HTTP_HOST']);
         $subdomain = $splithost[0];
         if ($noWWW && $subdomain === 'www') {
