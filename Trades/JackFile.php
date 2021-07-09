@@ -1,13 +1,11 @@
 <?php
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
-namespace SSITU\Jack\Trades;
+namespace SSITU\Jack;
 
-use \SSITU\Jack\Jack;
-
-class File implements File_i
+class JackFile
 {
 
-    public function write($data, $path, $formatRslt = false)
+    public static function write($data, $path, $formatRslt = false)
     {
         $write = false;
         if (is_writable(dirname($path))) {
@@ -16,11 +14,12 @@ class File implements File_i
         if (!$formatRslt) {
             return $write;
         }
-        return [Jack::Help()->getRsltKeyword($write) => $path];
+        return [self::getRsltKeyword($cop) => $dest];
+
     }
 
-    public function buffrInclude($path, $v_ = [])
-    { 
+    public static function buffrInclude($path, $v_ = [])
+    {
         if (file_exists($path)) {
             ob_start();
             include $path;
@@ -29,7 +28,7 @@ class File implements File_i
         return false;
     }
 
-    public function getContents($path)
+    public static function getContents($path)
     {
         if (file_exists($path)) {
             return file_get_contents($path);
@@ -37,7 +36,7 @@ class File implements File_i
         return false;
     }
 
-    public function readIni($path)
+    public static function readIni($path)
     {
         if (file_exists($path)) {
             return parse_ini_file($path);
@@ -45,19 +44,19 @@ class File implements File_i
         return false;
     }
 
-    public function getExt($path)
+    public static function getExt($path)
     {
         return strtolower(pathinfo($path, PATHINFO_EXTENSION));
     }
 
-    public function reqTrailingSlash($dirPath)
+    public static function reqTrailingSlash($dirPath)
     {
         return trim($dirPath, ' \n\r\t\v\0/\\') . '/';
     }
 
-    public function readJson($path)
+    public static function readJson($path)
     {
-        $content = $this->getContents($path);
+        $content = self::getContents($path);
         if ($content !== false) {
             $content = json_decode($content, true);
             if (!empty($content)) {
@@ -67,13 +66,13 @@ class File implements File_i
         return [];
     }
 
-    public function saveJson($data, $path, $formatRslt = false)
+    public static function saveJson($data, $path, $formatRslt = false)
     {
         $json = json_encode($data, JSON_PRETTY_PRINT);
-        return $this->write($json, $path, $formatRslt);
+        return self::write($json, $path, $formatRslt);
     }
 
-    public function testReadWrite($paths)
+    public static function testReadWrite($paths)
     {
         $rslt = [];
         foreach ($paths as $fileOrfolder) {
@@ -86,7 +85,7 @@ class File implements File_i
         return $rslt;
     }
 
-    public function moveDir($src, $dest)
+    public static function moveDir($src, $dest)
     {
         if (!is_dir($src) || $src === $dest) {
             return false;
@@ -97,7 +96,7 @@ class File implements File_i
         return rename($src, $dest);
     }
 
-    public function recursiveCopy($src, $dest, $excl = [])
+    public static function recursiveCopy($src, $dest, $excl = [])
     {
         try {
             $dir = opendir($src);
@@ -106,7 +105,7 @@ class File implements File_i
             while ($file = readdir($dir)) {
                 if (($file != '.') && ($file != '..') && (empty($excl) || !in_array($file, $excl))) {
                     if (is_dir($src . '/' . $file)) {
-                        $run = $this->recursiveCopy($src . '/' . $file, $dest . '/' . $file);
+                        $run = self::recursiveCopy($src . '/' . $file, $dest . '/' . $file);
                     } else {
                         $run = copy($src . '/' . $file, $dest . '/' . $file);
                     }
@@ -125,12 +124,12 @@ class File implements File_i
         }
     }
 
-    public function patternDelete($globPattern, $flag = 0)
+    public static function patternDelete($globPattern, $flag = 0)
     {
-       return array_map('unlink', glob($globPattern, $flag));
+        return array_map('unlink', glob($globPattern, $flag));
     }
 
-    public function recursiveDelete($dirPath)
+    public static function recursiveDelete($dirPath)
     {
         try {
             if (!empty($dirPath) && is_dir($dirPath)) {
@@ -147,7 +146,7 @@ class File implements File_i
         }
     }
 
-    public function copySrcToDest($src, $dest, $formatRslt = false)
+    public static function copySrcToDest($src, $dest, $formatRslt = false)
     {
         $cop = false;
         if (file_exists($src) && is_dir(dirname($dest))) {
@@ -156,10 +155,10 @@ class File implements File_i
         if (!$formatRslt) {
             return $cop;
         }
-        return [Jack::Help()->getRsltKeyword($cop) => $dest];
+        return [self::getRsltKeyword($cop) => $dest];
     }
 
-    public function recursiveGlob($base, $pattern, $flags = 0)
+    public static function recursiveGlob($base, $pattern, $flags = 0)
     {
         $flags = $flags & ~GLOB_NOCHECK;
 
@@ -178,14 +177,14 @@ class File implements File_i
         }
 
         foreach ($dirs as $dir) {
-            $dirFiles = $this->recursiveGlob($dir, $pattern, $flags);
+            $dirFiles = self::recursiveGlob($dir, $pattern, $flags);
             $files = array_merge($files, $dirFiles);
         }
 
         return $files;
     }
 
-    public function countInodes($path)
+    public static function countInodes($path)
     { //@doc: beware, this can be very slow
         $objects = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($path),
@@ -194,7 +193,7 @@ class File implements File_i
         return iterator_count($objects);
     }
 
-    public function getDirSize($dir)
+    public static function getDirSize($dir)
     { // @author: André Fiedler
         $dir = rtrim(str_replace('\\', '/', $dir), '/');
 
@@ -233,19 +232,28 @@ class File implements File_i
     }
 
 //@doc: $dir must be specified with __DIR__
-    public function getOccupiedSpace($dir)
-    {$dirSize = $this->getDirSize($dir);
+    public static function getOccupiedSpace($dir)
+    {$dirSize = self::getDirSize($dir);
         $sizeInGb = $dirSize / (1024 * 1024 * 1024);
         return round($sizeInGb, 2);
     }
 
 //@doc: $dir must be specified with __DIR__
-    public function getAvailableSpace($dir, $maxGB, $prct = true)
-    {$sizeInGb = $this->getOccupiedSpace($dir);
+    public static function getAvailableSpace($dir, $maxGB, $prct = true)
+    {$sizeInGb = self::getOccupiedSpace($dir);
         if ($prct) {
             $prctRslt = ($sizeInGb * 100) / $maxGB;
             return round(100 - $prctRslt, 2);
         }
         return $maxGB - $sizeInGb;
     }
+
+    public static function getRsltKeyword($boolish, $success = "success", $error = "err")
+    {
+        if (!empty($boolish)) {
+            return $success;
+        }
+        return $error;
+    }
+
 }

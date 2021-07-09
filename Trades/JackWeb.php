@@ -1,18 +1,17 @@
 <?php
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
+namespace SSITU\Jack;
 
-namespace SSITU\Jack\Trades;
-
-class Web implements Web_i
+class JackWeb
 {
 
-    public function redirect($url)
+    public static function redirect($url)
     {
         header('Location: ' . $url);
         exit;
     }
 
-    public function getProtocol()
+    public static function getProtocol()
     {
         $protoc = 'http';
         if ((!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') ||
@@ -23,7 +22,7 @@ class Web implements Web_i
         return $protoc;
     }
 
-    public function isAlive($url)
+    public static function isAlive($url)
     {
         if (filter_var($url, FILTER_VALIDATE_URL)) {
             $headers = @get_headers($url);
@@ -35,18 +34,7 @@ class Web implements Web_i
         return false;
     }
 
-    public function getSubDomain($noWWW = true)
-    {
-        //@todo:change or delete: invalid
-        $splithost = explode('.', $_SERVER['HTTP_HOST']);
-        $subdomain = $splithost[0];
-        if ($noWWW && $subdomain === 'www') {
-            $subdomain = $splithost[1];
-        }
-        return $subdomain;
-    }
-
-    public function httpPost($url, $data)
+    public static function httpPost($url, $data)
     {
         // @doc: $data is an associative array of fields, like:
         // $data = ["a" => "xyz", "b" => "123"];
@@ -59,12 +47,12 @@ class Web implements Web_i
         return $response; //it's always useful to at least return "true" on the other end
     }
 
-    public function b64url_encode($data)
+    public static function b64url_encode($data)
     { //@doc: $data must be already encoded in b64
         return str_replace(['+', '/', '='], ['-', '_', ''], $data);
     }
 
-    public function b64url_decode($data)
+    public static function b64url_decode($data)
     { //@doc: returns b64 ; requires php 7
         return str_replace(['-', '_'], ['+', '/'], $data);
     }
