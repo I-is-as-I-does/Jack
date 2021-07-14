@@ -2,13 +2,24 @@
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 namespace SSITU\Jack;
 
-class JackWeb
+class Web
 {
 
     public static function redirect($url)
     {
         header('Location: ' . $url);
         exit;
+    }
+
+    public static function addQueries($pageUrl, $queries)
+    {
+        if(substr($pageUrl,-1) !== '?'){
+            $pageUrl .= '?';
+        }
+        foreach ($queries as $key => $val) {
+            $pageUrl .= '&' . $key . '=' . $val;
+        }
+        return $pageUrl;
     }
 
     public static function getProtocol()
@@ -55,5 +66,23 @@ class JackWeb
     public static function b64url_decode($data)
     { //@doc: returns b64 ; requires php 7
         return str_replace(['-', '_'], ['+', '/'], $data);
+    }
+
+    public static function extractSubDomain($url = null, $exlude_www = true)
+    {
+        //@doc: this method WILL exclude www
+        if(empty($url)){
+            $url = $_SERVER['SERVER_NAME'];
+        }
+        $trimPattern = '^(https?)?([:\/])*';
+        if($exlude_www){
+            $trimPattern .= '(www\.)?';
+        }
+        $url = preg_replace('/'.$trimPattern.'/','',$url);
+        preg_match('/^([\w-]+)(?=\.[\w-]+\.)/', $url, $matches);
+        if (!empty($matches)) {
+            return $matches[0];
+        }
+        return false;
     }
 }

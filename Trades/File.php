@@ -2,8 +2,16 @@
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 namespace SSITU\Jack;
 
-class JackFile
+class File
 {
+
+    public static function recursiveMkdir($dir)
+    {
+        if (!is_dir($dir)) {
+            return @mkdir($dir, 0777, true);
+        }
+        return true;
+    }
 
     public static function write($data, $path, $formatRslt = false)
     {
@@ -54,21 +62,24 @@ class JackFile
         return trim($dirPath, ' \n\r\t\v\0/\\') . '/';
     }
 
-    public static function readJson($path)
+    public static function readJson($path, $asArray = true, $strictMode = false)
     {
         $content = self::getContents($path);
         if ($content !== false) {
-            $content = json_decode($content, true);
-            if (!empty($content)) {
+            $content = json_decode($content, $asArray);
+            if (!is_null($content)) {
                 return $content;
             }
+        }
+        if ($strictMode) {
+            return null;
         }
         return [];
     }
 
     public static function saveJson($data, $path, $formatRslt = false)
     {
-        $json = json_encode($data, JSON_PRETTY_PRINT);
+        $json = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
         return self::write($json, $path, $formatRslt);
     }
 

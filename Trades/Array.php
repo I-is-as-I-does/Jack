@@ -2,7 +2,7 @@
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 namespace SSITU\Jack;
 
-class JackArray
+class Arrays
 {
 
     public static function sortNestedByKey($arr, $key)
@@ -105,5 +105,25 @@ class JackArray
     public static function strlenItms($arr)
     {
         return array_map('strlen', $arr);
+    }
+
+    public static function highestKey($arr)
+    {
+        //@doc: works with string keys too (alphabetical order)
+        if (empty($arr)) {
+            return 0;
+        }
+        return max(array_keys($arr));
+    }
+
+    public static function highestIntKey($arr)
+    {
+        if (!empty($arr)) {
+            $intKeys = array_filter(array_keys($arr), 'is_int');
+            if (!empty($intKeys)) {
+                return max($intKeys);
+            }
+        }
+        return 0;
     }
 }
