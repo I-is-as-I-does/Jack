@@ -1,19 +1,12 @@
 <?php
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
-namespace SSITU\Jack;
 
-class Admin
+namespace SSITU\Jack\Trades;
+
+class Admin implements Admin_i
 {
 
-    public static function benchmark($callback, $argm = []){
-        $time_start = microtime(true);
-        call_user_func_array($callback, $argm);
-        $time_end = microtime(true);
-        return $time_end - $time_start;
-        }
-    
-
-    public static function bestHashCost($timeTarget = 0.05, $cost = 8, $algo = PASSWORD_DEFAULT)
+    public function bestHashCost($timeTarget = 0.05, $cost = 8, $algo = PASSWORD_DEFAULT)
     {
 /** @source: www.php.net/manual
  * This code will benchmark your server to determine how high of a cost you can
@@ -32,19 +25,19 @@ class Admin
         return "Appropriate Cost Found: " . $cost;
     }
 
-    public static function serverInfos()
+    public function serverInfos()
     {
         phpinfo(32);
     }
 
-    public static function phpInfo()
+    public function phpInfo()
     {
         phpinfo();
     }
 
-    public static function hashAdminKey($adminKey)
-    {
+    public function hashAdminKey($adminKey){
         return password_hash($adminKey, PASSWORD_BCRYPT);
     }
 
+   
 }
