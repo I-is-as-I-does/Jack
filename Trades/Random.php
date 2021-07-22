@@ -4,39 +4,44 @@ namespace SSITU\Jack;
 
 class Random
 {
-  
-    public static function boolean(){
-        return (bool)random_int(0, 1);
+
+    public static function boolean()
+    {
+        return (bool) random_int(0, 1);
     }
 
-    public static function digit(){
+    public static function digit()
+    {
         return random_int(0, 9);
     }
 
-    public static function speChar($speChars = '*&!@%^#$'){
-        
-       return $speChars[random_int(0, 7)];
+    public static function speChar($speChars = '*&!@%^#$')
+    {
+
+        return $speChars[random_int(0, 7)];
     }
-    
-    public static function multLetters($count, $case = 'random'){
-        $out = '';   
-        for($c = 0;$c < $count; $c++){
+
+    public static function multLetters($count, $case = 'random')
+    {
+        $out = '';
+        for ($c = 0; $c < $count; $c++) {
             $out .= self::letter($case);
         }
         return $out;
     }
-    
-    public static function letter($case = 'random') {
-    $a_z = "abcdefghijklmnopqrstuvwxyz";
-    $rand_letter = $a_z[random_int(0, 25)];
-    if($case == 'random'){
-        $case = self::boolean();
+
+    public static function letter($case = 'random')
+    {
+        $a_z = "abcdefghijklmnopqrstuvwxyz";
+        $rand_letter = $a_z[random_int(0, 25)];
+        if ($case == 'random') {
+            $case = self::boolean();
+        }
+        if ($case == true || $case == 'upper') {
+            return strtoupper($rand_letter);
+        }
+        return $rand_letter;
     }
-    if($case == true || $case == 'upper'){
-        return strtoupper($rand_letter);
-    } 
-    return $rand_letter;
-  }
 
     public static function mix($bytes = 32, $speChars = '*&!@%^#$')
     {
@@ -45,8 +50,10 @@ class Random
         }
 
         $methods = ['letter' => 'random',
-            'digit' => null,
-            'speChar' => $speChars];
+            'digit' => null];
+        if (!empty($speChars)) {
+            $methods['speChar'] = $speChars;
+        }
         $tok = '';
         foreach ($methods as $method => $arg) {
             $tok .= self::$method(...[$arg]);

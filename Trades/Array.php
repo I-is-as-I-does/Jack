@@ -5,6 +5,14 @@ namespace SSITU\Jack;
 class Arrays
 {
 
+    public static function unsetNestedColumn($arr, $columnKey){
+        array_walk($arr, function (&$a, $k) use ($columnKey) {
+            if(array_key_exists($columnKey, $a)){
+                unset($a[$columnKey]); 
+            }          
+          });
+    }
+
     public static function sortNestedByKey($arr, $key)
     {
         uasort($arr, function ($a, $b) use ($key) {

@@ -96,15 +96,16 @@ class File
         return $rslt;
     }
 
-    public static function moveDir($src, $dest)
+
+    public static function moveFileObj($src, $dest)
     {
-        if (!is_dir($src) || $src === $dest) {
+        if (!file_exists($src) || $src === $dest) {
             return false;
         }
         if (!is_dir(dirname($dest))) {
             @mkdir(dirname($dest), 0777, true);
         }
-        return rename($src, $dest);
+        return @rename($src, $dest);
     }
 
     public static function recursiveCopy($src, $dest, $excl = [])

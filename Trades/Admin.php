@@ -5,6 +5,14 @@ namespace SSITU\Jack;
 class Admin
 {
 
+    public static function benchmark($callback, $argm = []){
+        $time_start = microtime(true);
+        call_user_func_array($callback, $argm);
+        $time_end = microtime(true);
+        return $time_end - $time_start;
+        }
+    
+
     public static function bestHashCost($timeTarget = 0.05, $cost = 8, $algo = PASSWORD_DEFAULT)
     {
 /** @source: www.php.net/manual
