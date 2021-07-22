@@ -19,8 +19,8 @@
   "require": {},
   "autoload": {
     "psr-4": {
-      "SSITU\\Jack\\": "src",
-      "SSITU\\JackTrades\\": "src"
+      "SSITU\\Jack\\Interfaces\\": "Interfaces/",
+      "SSITU\\Jack\\": "Trades/"
     }
   }
 }
