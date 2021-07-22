@@ -2,8 +2,8 @@
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 namespace SSITU\Jack;
 
-class Random
-{
+
+class Random implements \SSITU\Jack\Interfaces\Random_i {
 
     public static function boolean()
     {
@@ -15,13 +15,13 @@ class Random
         return random_int(0, 9);
     }
 
-    public static function speChar($speChars = '*&!@%^#$')
+    public static function speChar(string | array $speChars = '*&!@%^#$')
     {
 
         return $speChars[random_int(0, 7)];
     }
 
-    public static function multLetters($count, $case = 'random')
+    public static function multLetters(int $count, string $case = 'random')
     {
         $out = '';
         for ($c = 0; $c < $count; $c++) {
@@ -30,7 +30,7 @@ class Random
         return $out;
     }
 
-    public static function letter($case = 'random')
+    public static function letter(string $case = 'random')
     {
         $a_z = "abcdefghijklmnopqrstuvwxyz";
         $rand_letter = $a_z[random_int(0, 25)];
@@ -43,7 +43,7 @@ class Random
         return $rand_letter;
     }
 
-    public static function mix($bytes = 32, $speChars = '*&!@%^#$')
+    public static function mix(int $bytes = 32, string | array $speChars = '*&!@%^#$')
     {
         if ($bytes < 8) {
             $bytes = 8;

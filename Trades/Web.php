@@ -2,18 +2,18 @@
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 namespace SSITU\Jack;
 
-class Web
-{
 
-    public static function redirect($url)
+class Web implements \SSITU\Jack\Interfaces\Web_i {
+
+    public static function redirect(string $url)
     {
         header('Location: ' . $url);
         exit;
     }
 
-    public static function addQueries($pageUrl, $queries)
+    public static function addQueries(string $pageUrl, array $queries)
     {
-        if(substr($pageUrl,-1) !== '?'){
+        if (substr($pageUrl, -1) !== '?') {
             $pageUrl .= '?';
         }
         foreach ($queries as $key => $val) {
@@ -33,7 +33,7 @@ class Web
         return $protoc;
     }
 
-    public static function isAlive($url)
+    public static function isAlive(string $url)
     {
         if (filter_var($url, FILTER_VALIDATE_URL)) {
             $headers = @get_headers($url);
@@ -45,7 +45,7 @@ class Web
         return false;
     }
 
-    public static function httpPost($url, $data)
+    public static function httpPost(string $url, array $data)
     {
         // @doc: $data is an associative array of fields, like:
         // $data = ["a" => "xyz", "b" => "123"];
@@ -58,27 +58,27 @@ class Web
         return $response; //it's always useful to at least return "true" on the other end
     }
 
-    public static function b64url_encode($data)
+    public static function b64url_encode(string $data)
     { //@doc: $data must be already encoded in b64
         return str_replace(['+', '/', '='], ['-', '_', ''], $data);
     }
 
-    public static function b64url_decode($data)
+    public static function b64url_decode(string $data)
     { //@doc: returns b64 ; requires php 7
         return str_replace(['-', '_'], ['+', '/'], $data);
     }
 
-    public static function extractSubDomain($url = null, $exlude_www = true)
+    public static function extractSubDomain(?string $url = null, bool $exlude_www = true)
     {
         //@doc: this method WILL exclude www
-        if(empty($url)){
+        if (empty($url)) {
             $url = $_SERVER['SERVER_NAME'];
         }
         $trimPattern = '^(https?)?([:\/])*';
-        if($exlude_www){
+        if ($exlude_www) {
             $trimPattern .= '(www\.)?';
         }
-        $url = preg_replace('/'.$trimPattern.'/','',$url);
+        $url = preg_replace('/' . $trimPattern . '/', '', $url);
         preg_match('/^([\w-]+)(?=\.[\w-]+\.)/', $url, $matches);
         if (!empty($matches)) {
             return $matches[0];

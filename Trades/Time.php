@@ -2,49 +2,49 @@
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 namespace SSITU\Jack;
 
-class Time
-{
+
+class Time implements \SSITU\Jack\Interfaces\Time_i {
 
     public static function isoStamp()
     {
         return date("c");
     }
 
-    public static function stamp($format = "Y-m-d H:i:s \G\M\TO")
+    public static function stamp(string $format = "Y-m-d H:i:s \G\M\TO")
     {
         return date($format);
     }
 
-    public static function subTime($date, $interval, $format = "c")
+    public static function subTime(string $date, string $interval, string $format = "c")
     {
         $date = date_create($date);
         date_sub($date, date_interval_create_from_date_string($interval));
         return date_format($date, $format);
     }
 
-    public static function addTime($date, $interval, $format = "c")
+    public static function addTime(string $date, string $interval, string $format = "c")
     {
         $date = date_create($date);
         date_add($date, date_interval_create_from_date_string($interval));
         return date_format($date, $format);
     }
 
-    public static function isValidDate($date)
-    {    date('Y-m-d',$date);
+    public static function isValidDate(string $date)
+    {date('Y-m-d', $date);
         return !empty(strtotime($date));
     }
 
-    public static function dateObj($date)
+    public static function dateObj(string $date)
     {
         try {
             $dateObj = date_create($date);
-        }catch (\Exception$e) {
+        } catch (\Exception$e) {
             return false;
         }
         return $dateObj;
     }
 
-    public static function isExpired($givendate, $maxdate)
+    public static function isExpired(string $givendate, string $maxdate)
     {
         try {
             $givendate = date_create($givendate);
@@ -58,11 +58,11 @@ class Time
         }
     }
 
-    public static function isInInterval($date, $tolerance, $unit = "minutes")
+    public static function isInInterval(string $date, int | string $tolerance, string $unit = "minutes")
     {
         $lapse = $tolerance . ' ' . $unit;
         $minDate = strtotime($date . ' - ' . $lapse);
-        if($minDate === false){
+        if ($minDate === false) {
             return null;
             //@doc: invalid tolerance and/or unit
         }
@@ -71,7 +71,7 @@ class Time
         return ($currDate < $maxDate && $currDate > $minDate);
     }
 
-    public static function isInRange($date, $minDate, $maxDate = "now")
+    public static function isInRange(string $date, string $minDate, string $maxDate = "now")
     {
         try {
             $maxDate = date_create($maxDate);
@@ -88,7 +88,7 @@ class Time
 
     }
 
-    public static function isFuture($date)
+    public static function isFuture(string $date)
     {
         try {
             $date = date_create($date);
@@ -102,7 +102,7 @@ class Time
         }
     }
 
-    public static function convertEngToFormat($unit)
+    public static function convertEngToFormat(string $unit)
     {
         $unit = strtolower($unit);
         if (substr($unit, -1) == 's') {
@@ -127,7 +127,7 @@ class Time
         return false;
     }
 
-    public static function countRemainingTime($startDate, $count, $unit = 'day')
+    public static function countRemainingTime(string $startDate, int | string $count, string $unit = 'day')
     {
         $format = self::convertEngToFormat($unit);
         if ($format === false) {
@@ -140,14 +140,14 @@ class Time
         return self::relativeInterval($now, $targetDate, $format);
     }
 
-    public static function relativeInterval($originDate, $targetDate, $format)
+    public static function relativeInterval(object $originDate, object $targetDate, string $format)
     {
         //@doc: here, dates MUST be date objects
         $interval = date_diff($originDate, $targetDate);
-        return (int) date_interval_format($interval, '%r'.$format);
+        return (int) date_interval_format($interval, '%r' . $format);
     }
 
-    public static function getInterval($origin, $target = null, $format = '%a')
+    public static function getInterval(string $origin, ?string $target = null, string $format = '%a')
     { //@doc: default format is: days
         if (empty($target)) {
             $target = self::isoStamp();
@@ -157,7 +157,7 @@ class Time
         return self::relativeInterval($origin, $target, $format);
     }
 
-    public static function isValidTimezone($timezoneId)
+    public static function isValidTimezone(string $timezoneId)
     {
         try {
             new \DateTimeZone($timezoneId);

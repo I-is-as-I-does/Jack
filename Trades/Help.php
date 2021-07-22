@@ -2,15 +2,15 @@
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 namespace SSITU\Jack;
 
-class Help
-{
 
-    public static function isValidHexColor($hexCode)
+class Help implements \SSITU\Jack\Interfaces\Help_i {
+
+    public static function isValidHexColor(string $hexCode)
     {
         return !empty(preg_match("/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/", $hexCode));
     }
 
-    public static function resolveHexColor($hexCode)
+    public static function resolveHexColor(string $hexCode)
     {
         if (!empty($hexCode) && is_string($hexCode)) {
             if ($hexCode[0] != '#') {
@@ -23,7 +23,7 @@ class Help
         return false;
     }
 
-    public static function filterBool($var)
+    public static function filterBool(mixed $var)
     {
         $san = filter_var($var, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         if ($san === null) {
@@ -32,7 +32,7 @@ class Help
         return true;
     }
 
-    public static function filterValue($var, $filter = FILTER_SANITIZE_STRING)
+    public static function filterValue(mixed $var, $filter = FILTER_SANITIZE_STRING)
     {
         $san = filter_var($var, $filter);
         if ($san == $var) {
@@ -41,19 +41,19 @@ class Help
         return false;
     }
 
-    public static function intLen($int)
+    public static function intLen(int $int)
     {
         return $int !== 0 ? floor(log10($int) + 1) : 1;
     }
 
-    public static function UpCamelCase($string)
+    public static function UpCamelCase(string $string)
     {
         $splt = preg_split('/[^A-Za-z0-9]+|(?=[A-Z])/', $string);
         $splt = array_map('ucfirst', $splt);
         return implode('', $splt);
     }
 
-    public static function isHTML($string)
+    public static function isHTML(string $string)
     {
         if ($string != strip_tags($string)) {
             return true;
@@ -61,12 +61,12 @@ class Help
         return false;
     }
 
-    public static function isPostvInt($value)
+    public static function isPostvInt(mixed $value)
     { //  @doc works even if $value is a string-integer
         return ((is_int($value) || ctype_digit($value)) && (int) $value > 0);
     }
 
-    public static function isValidPattern($pattern)
+    public static function isValidPattern(string $pattern)
     {
         $pattern = '/' . trim($pattern, '/') . '/';
         if (@preg_match($pattern, null) === false) {
@@ -75,12 +75,12 @@ class Help
         return true;
     }
 
-    public static function boolify($value)
+    public static function boolify(mixed $value)
     {
         return filter_var($value, FILTER_VALIDATE_BOOLEAN);
     }
 
-    public static function num2alpha($n)
+    public static function num2alpha(int $n)
     {
         $r = '';
         for ($i = 1; $n >= 0 && $i < 10; $i++) {
@@ -89,7 +89,7 @@ class Help
         }
         return $r;
     }
-    public static function alpha2num($a)
+    public static function alpha2num(string $a)
     {
         $r = 0;
         $l = strlen($a);
@@ -99,7 +99,7 @@ class Help
         return $r - 1;
     }
 
-    public static function intIsInRange($int, $min, $max)
+    public static function intIsInRange(int | string $int, int | string $min, int | string $max)
     {
         return filter_var(
             (int) $int,
