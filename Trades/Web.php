@@ -22,13 +22,17 @@ class Web implements \SSITU\Jack\Interfaces\Web_i {
         return $pageUrl;
     }
 
-    public static function getProtocol()
+    public static function getProtocol($forceHttps = false, $addDelimiter = false)
     {
         $protoc = 'http';
-        if ((!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') ||
+
+        if ($forceHttps || (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') ||
             $_SERVER['SERVER_PORT'] == 443
         ) {
             $protoc .= 's';
+        }
+        if($addDelimiter){
+            $protoc .= '://';
         }
         return $protoc;
     }
@@ -83,6 +87,6 @@ class Web implements \SSITU\Jack\Interfaces\Web_i {
         if (!empty($matches)) {
             return $matches[0];
         }
-        return false;
+        return '';
     }
 }
