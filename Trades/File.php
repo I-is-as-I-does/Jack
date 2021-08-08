@@ -12,6 +12,14 @@ class File implements \SSITU\Jack\Interfaces\File_i {
         return true;
     }
 
+    public static function writeAppend(mixed $data, string $path)
+    {
+        if (is_writable(dirname($path))) {
+            return file_put_contents($path, $data, LOCK_EX | FILE_APPEND);
+        }
+        return false;
+    }
+
     public static function write(mixed $data, string $path, bool $formatRslt = false)
     {
         $write = false;
@@ -76,9 +84,15 @@ class File implements \SSITU\Jack\Interfaces\File_i {
         return [];
     }
 
+    public static function prettyJsonEncode(mixed $data)
+    {
+       return json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
+
+    }
+
     public static function saveJson(mixed $data, string $path, bool $formatRslt = false)
     {
-        $json = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
+        $json = self::prettyJsonEncode($data);
         return self::write($json, $path, $formatRslt);
     }
 

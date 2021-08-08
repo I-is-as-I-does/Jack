@@ -2,7 +2,6 @@
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 namespace SSITU\Jack;
 
-
 class Random implements \SSITU\Jack\Interfaces\Random_i {
 
     public static function boolean()

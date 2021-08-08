@@ -1,14 +1,17 @@
 <?php
-/* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
+/* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
+
 namespace SSITU\Jack\Interfaces;
 interface File_i {
 public static function recursiveMkdir(string $dir);
+public static function writeAppend(mixed $data, string $path);
 public static function write(mixed $data, string $path, bool $formatRslt = false);
 public static function buffrInclude(string $path, mixed $v_ = NULL);
 public static function getContents(string $path);
 public static function readIni(string $path);
 public static function getExt(string $path);
 public static function reqTrailingSlash(string $dirPath);
+public static function prettyJsonEncode(mixed $data);
 public static function readJson(string $path, bool $asArray = true, bool $strictMode = false);
 public static function saveJson(mixed $data, string $path, bool $formatRslt = false);
 public static function testReadWrite(array $paths);
