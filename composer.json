@@ -20,7 +20,8 @@
   "autoload": {
     "psr-4": {
       "SSITU\\Jack\\Interfaces\\": "Interfaces/",
-      "SSITU\\Jack\\": "Trades/"
+      "SSITU\\Jack\\": "Trades/",
+      "SSITU\\MiniJack\\": "Trades/"
     }
   }
 }

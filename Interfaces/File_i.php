@@ -10,7 +10,7 @@ public static function buffrInclude(string $path, mixed $v_ = NULL);
 public static function getContents(string $path);
 public static function readIni(string $path);
 public static function getExt(string $path);
-public static function reqTrailingSlash(string $dirPath);
+public static function reqTrailingSlash(string $path);
 public static function prettyJsonEncode(mixed $data);
 public static function readJson(string $path, bool $asArray = true, bool $strictMode = false);
 public static function saveJson(mixed $data, string $path, bool $formatRslt = false);

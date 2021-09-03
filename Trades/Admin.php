@@ -4,6 +4,18 @@ namespace SSITU\Jack;
 
 class Admin implements \SSITU\Jack\Interfaces\Admin_i {
 
+
+    public static function getAppFolder()
+    {
+        $documentRoot = "";
+        if (isset($_SERVER["CONTEXT_DOCUMENT_ROOT"])) {
+            $documentRoot = $_SERVER["CONTEXT_DOCUMENT_ROOT"];
+        } else if (isset($_SERVER["DOCUMENT_ROOT"])) {
+            $documentRoot = $_SERVER["DOCUMENT_ROOT"];
+        }
+        return trim(dirname(str_replace($documentRoot, "", $_SERVER["SCRIPT_FILENAME"])), '/\\');
+    }
+
     public static function benchmark(callable $callback, array $argm = [])
     {
         $time_start = microtime(true);

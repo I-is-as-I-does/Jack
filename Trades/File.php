@@ -2,7 +2,9 @@
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 namespace SSITU\Jack;
 
-class File implements \SSITU\Jack\Interfaces\File_i {
+class File implements \SSITU\Jack\Interfaces\File_i
+
+{
 
     public static function recursiveMkdir(string $dir)
     {
@@ -64,9 +66,10 @@ class File implements \SSITU\Jack\Interfaces\File_i {
         return strtolower(pathinfo($path, PATHINFO_EXTENSION));
     }
 
-    public static function reqTrailingSlash(string $dirPath)
+
+    public static function reqTrailingSlash(string $path)
     {
-        return trim($dirPath, ' \n\r\t\v\0/\\') . '/';
+        return rtrim($path, ' \n\r\t\v\0/\\') . '/';
     }
 
     public static function readJson(string $path, bool $asArray = true, bool $strictMode = false)
@@ -86,7 +89,7 @@ class File implements \SSITU\Jack\Interfaces\File_i {
 
     public static function prettyJsonEncode(mixed $data)
     {
-       return json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
+        return json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
 
     }
 
