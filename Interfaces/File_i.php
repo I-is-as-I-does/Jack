@@ -18,7 +18,7 @@ public static function testReadWrite(array $paths);
 public static function moveFileObj(string $src, string $dest);
 public static function recursiveCopy(string $src, string $dest, array $excl = array ());
 public static function patternDelete(string $globPattern, mixed $flag = 0);
-public static function recursiveDelete(string $dirPath);
+public static function recursiveDelete(string $dirPath, bool $parentDirToo = false);
 public static function copySrcToDest(string $src, string $dest, bool $formatRslt = false);
 public static function recursiveGlob(string $base, string $pattern, mixed $flags = 0);
 public static function countInodes(string $path);

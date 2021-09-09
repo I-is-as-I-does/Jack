@@ -16,8 +16,10 @@ class Random implements \SSITU\Jack\Interfaces\Random_i {
 
     public static function speChar(string | array $speChars = '*&!@%^#$')
     {
-
-        return $speChars[random_int(0, 7)];
+        if(is_array($speChars)){
+            $speChars = implode('',$speChars);
+        }
+        return $speChars[random_int(0, strlen($speChars)-1)];
     }
 
     public static function multLetters(int $count, string $case = 'random')
@@ -36,7 +38,7 @@ class Random implements \SSITU\Jack\Interfaces\Random_i {
         if ($case == 'random') {
             $case = self::boolean();
         }
-        if ($case == true || $case == 'upper') {
+        if ($case === true || $case === 'upper') {
             return strtoupper($rand_letter);
         }
         return $rand_letter;
@@ -47,21 +49,24 @@ class Random implements \SSITU\Jack\Interfaces\Random_i {
         if ($bytes < 8) {
             $bytes = 8;
         }
-
-        $methods = ['letter' => 'random',
-            'digit' => null];
+        $methods = [
+            ['letter', 'lower'],
+            ['letter', 'upper'],
+            ['letter', 'random'],
+            ['digit', null]];
         if (!empty($speChars)) {
-            $methods['speChar'] = $speChars;
+            $methods[] = ['speChar',$speChars];
         }
         $tok = '';
-        foreach ($methods as $method => $arg) {
-            $tok .= self::$method(...[$arg]);
+        foreach ($methods as $method) {
+            $name = $method[0];
+            $tok .= self::$name(...[$method[1]]);
         }
 
         while (strlen($tok) != $bytes) {
             $randMethod = array_rand($methods);
-            $arg = $methods[$randMethod];
-            $tok .= self::$randMethod(...[$arg]);
+            $name = $methods[$randMethod][0];
+            $tok .= self::$name(...[$methods[$randMethod][1]]);
         }
 
         return str_shuffle($tok);

@@ -156,7 +156,7 @@ class File implements \SSITU\Jack\Interfaces\File_i
         return array_map('unlink', glob($globPattern, $flag));
     }
 
-    public static function recursiveDelete(string $dirPath)
+    public static function recursiveDelete(string $dirPath, bool $parentDirToo = false)
     {
         try {
             if (!empty($dirPath) && is_dir($dirPath)) {
@@ -164,6 +164,9 @@ class File implements \SSITU\Jack\Interfaces\File_i
                 $files = new \RecursiveIteratorIterator($dirObj, \RecursiveIteratorIterator::CHILD_FIRST);
                 foreach ($files as $path) {
                     $path->isDir() && !$path->isLink() ? @rmdir($path->getPathname()) : @unlink($path->getPathname());
+                }
+                if($parentDirToo){
+                    @rmdir($dirPath);
                 }
                 return true;
             }
