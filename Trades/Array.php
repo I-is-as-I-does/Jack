@@ -77,6 +77,21 @@ class Arrays implements \SSITU\Jack\Interfaces\Array_i {
         return $newValues + $originValues;
     }
 
+    public static function findValue(string $flatIndex, array $array)
+{
+    if($array){
+    $index = explode('.', $flatIndex);
+    $point = $array;
+    foreach ($index as $idx) {
+        if (!array_key_exists($idx, $point)) {
+            return;
+        }
+        $point = $point[$idx];
+    }
+    return $point;
+}
+}
+
     public static function flatten(mixed $itm, array $out = [], mixed $key = '')
     {
         if (is_array($itm)) {

@@ -3,6 +3,7 @@
 
 namespace SSITU\Jack\Interfaces;
 interface File_i {
+    
     public static function dirExists(string $path, bool $create = false);
     public static function backToSlash(string $path);
 public static function recursiveMkdir(string $dir);

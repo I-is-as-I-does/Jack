@@ -1,5 +1,6 @@
 <?php
-/* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
+/* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
+
 namespace SSITU\Jack\Interfaces;
 interface Array_i {
 public static function unsetNestedColumn(array $arr, mixed $columnKey);
@@ -14,6 +15,7 @@ public static function countEmptyItms(array $arr);
 public static function allItemsAreInt(array $arr);
 public static function allItemsAreString(array $arr);
 public static function merge(array $originValues, array $newValues);
+public static function findValue(string $flatIndex, array $array);
 public static function flatten(mixed $itm, array $out = array (), mixed $key = '');
 public static function reIndex(array $arr, int $startAt = 0);
 public static function longestItm(array $arr);
