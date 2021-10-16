@@ -6,6 +6,10 @@ class File implements \SSITU\Jack\Interfaces\File_i
 
 {
 
+    public static function dirExists(string $path, bool $create = false)
+    {
+        return is_dir($path) || ($create && !self::recursiveMkdir($path));
+    }
     
     public static function backToSlash(string $path)
     {
