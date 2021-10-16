@@ -6,6 +6,13 @@ class File implements \SSITU\Jack\Interfaces\File_i
 
 {
 
+    
+    public static function backToSlash(string $path)
+    {
+        return str_replace('\\', '/', $path);
+    }
+
+
     public static function recursiveMkdir(string $dir)
     {
         if (!is_dir($dir)) {
