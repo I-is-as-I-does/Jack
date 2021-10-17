@@ -2,7 +2,7 @@
 /* This file is part of Jack | SSITU | (c) 2021 I-is-as-I-does | MIT License */
 
 namespace SSITU\Jack\Interfaces;
-interface Array_i {
+interface Arrays_i {
 public static function unsetNestedColumn(array $arr, mixed $columnKey);
 public static function sortNestedByKey(array $arr, mixed $key);
 public static function sortByKey(array $arr, mixed $key,  $order = 4);
