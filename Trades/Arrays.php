@@ -37,6 +37,11 @@ class Arrays implements \SSITU\Jack\Interfaces\Arrays_i {
         return array_keys(self::filterNonEmptyItms($arr));
     }
 
+    public static function filterDupeAndEmptyItms(array $arr)
+    {
+        return self::filterEmptyItms(array_unique($arr));
+    }
+
     public static function filterEmptyItms(array $arr)
     {
         return array_filter($arr, function ($itm) {return !empty($itm);});

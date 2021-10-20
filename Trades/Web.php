@@ -37,6 +37,40 @@ class Web implements \SSITU\Jack\Interfaces\Web_i {
         return $protoc;
     }
 
+    
+    public static function setCookie(bool $startSession = true, bool $httponly = true, string $samesite = 'None', int $lifetime = 0, string $path = '/', ?bool $secure = null, ?string $domain = null)
+    {
+
+        if (!in_array($samesite, ['None','Lax', 'Strict'])) {
+            $samesite = 'None';
+        }
+        if ($lifetime < 0) {
+            $lifetime = 0;
+        }
+        if(empty($domain)){
+           $domain = $_SERVER['HTTP_HOST'];
+        }
+        if(is_null($secure)){
+            $secure = false;
+            if(self::getProtocol(false,false) == 'https'){
+                $secure = true;
+            }
+        }
+        $argm = [
+            'httponly'=>$httponly,
+            'samesite'=>$samesite,
+            'lifetime'=>$lifetime,
+            'path'=>$path,
+            'secure'=>$secure,
+            'domain'=>$domain,
+        ];
+        session_set_cookie_params($argm);
+        if($startSession){
+            session_start();
+        }
+    }
+
+
     public static function isAlive(string $url)
     {
         if (filter_var($url, FILTER_VALIDATE_URL)) {

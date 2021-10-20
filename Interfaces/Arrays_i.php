@@ -7,6 +7,7 @@ public static function unsetNestedColumn(array $arr, mixed $columnKey);
 public static function sortNestedByKey(array $arr, mixed $key);
 public static function sortByKey(array $arr, mixed $key,  $order = 4);
 public static function emptyItmsKeys(array $arr);
+public static function filterDupeAndEmptyItms(array $arr);
 public static function filterEmptyItms(array $arr);
 public static function filterNonEmptyItms(array $arr);
 public static function allItmsAreEmpty(array $arr);
